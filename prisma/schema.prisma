@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("PESERTA") // ADMIN, PENGAWAS, PESERTA
+  phone     String?
+  photoUrl  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attendances     Attendance[]
+  examResults     ExamResult[]
+  certificates    Certificate[]
+  examAnswers     ExamAnswer[]
+  examSupervisors ExamSupervisor[]
+}
+
+model Exam {
+  id              String   @id @default(uuid())
+  title           String
+  description     String?
+  startTime       DateTime
+  durationMinutes Int
+  passingGrade    Float    @default(70)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  attendances  Attendance[]
+  examResults  ExamResult[]
+  certificates Certificate[]
+  supervisors  ExamSupervisor[]
+  questions    ExamQuestion[]
+}
+
+model ExamSupervisor {
+  id        String   @id @default(uuid())
+  userId    String
+  examId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examId])
+}
+
+model QuestionBank {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions   Question[]
+}
+
+model Question {
+  id            String   @id @default(uuid())
+  bankId        String
+  type          String   // PG, ESSAY
+  text          String
+  options       String?  // JSON string untuk Pilihan Ganda (A, B, C, D)
+  correctAnswer String?  // Jawaban benar untuk PG
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bank        QuestionBank   @relation(fields: [bankId], references: [id], onDelete: Cascade)
+  examAnswers ExamAnswer[]
+  exams       ExamQuestion[]
+}
+
+model ExamQuestion {
+  id         String   @id @default(uuid())
+  examId     String
+  questionId String
+
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([examId, questionId])
+}
+
+model ExamAnswer {
+  id         String   @id @default(uuid())
+  userId     String
+  questionId String
+  answer     String
+  score      Float?   // Nilai otomatis untuk PG, manual untuk Esai
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model Attendance {
+  id       String   @id @default(uuid())
+  userId   String
+  examId   String
+  scanTime DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examId])
+}
+
+model ExamResult {
+  id          String   @id @default(uuid())
+  userId      String
+  examId      String
+  pgScore     Float    @default(0)
+  essayScore  Float    @default(0)
+  finalStatus String   @default("PENDING") // PENDING, LULUS, TIDAK_LULUS
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examId])
+}
+
+model Certificate {
+  id        String   @id @default(uuid())
+  userId    String
+  examId    String
+  pdfUrl    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+}
