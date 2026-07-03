@@ -24,8 +24,8 @@ export default function AdminHeader({ userName }: AdminHeaderProps) {
       elevation={0}
       sx={{
         bgcolor: '#fff',
-        color: '#1e293b',
-        borderBottom: '1px solid #e2e8f0',
+        color: '#2c352d',
+        borderBottom: '1px solid #e8e6df',
       }}
     >
       <Toolbar sx={{ justifyContent: 'flex-end', gap: 2 }}>
@@ -34,14 +34,14 @@ export default function AdminHeader({ userName }: AdminHeaderProps) {
             sx={{
               width: 32,
               height: 32,
-              bgcolor: '#0ea5e9',
+              bgcolor: '#789276',
               fontSize: '0.85rem',
               fontWeight: 700,
             }}
           >
             {userName.charAt(0).toUpperCase()}
           </Avatar>
-          <Typography variant="body2" sx={{ fontWeight: 600, color: '#334155' }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: '#425045' }}>
             {userName}
           </Typography>
         </Box>

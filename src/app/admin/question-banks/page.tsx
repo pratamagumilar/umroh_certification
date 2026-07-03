@@ -169,10 +169,10 @@ export default function AdminQuestionBanksPage() {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a' }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a201b' }}>
             Bank Soal (Master)
           </Typography>
-          <Typography variant="body2" sx={{ color: '#64748b' }}>
+          <Typography variant="body2" sx={{ color: '#78867a' }}>
             Kelola kumpulan soal yang dapat digunakan ulang di berbagai ujian.
           </Typography>
         </Box>
@@ -191,7 +191,7 @@ export default function AdminQuestionBanksPage() {
       <TableContainer component={Paper} sx={{ borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9' }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: '#f8fafc' }}>
+            <TableRow sx={{ bgcolor: '#faf9f6' }}>
               <TableCell sx={{ fontWeight: 700 }}>Nama Bank Soal</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Deskripsi</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Jumlah Soal</TableCell>
@@ -207,7 +207,7 @@ export default function AdminQuestionBanksPage() {
               </TableRow>
             ) : banks.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} align="center" sx={{ py: 4, color: '#94a3b8' }}>
+                <TableCell colSpan={4} align="center" sx={{ py: 4, color: '#a3aca4' }}>
                   Belum ada bank soal.
                 </TableCell>
               </TableRow>

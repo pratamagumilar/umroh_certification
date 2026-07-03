@@ -94,11 +94,11 @@ export default function ExamPreparationPage({ params }: { params: Promise<{ id: 
 
       <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
         <CardContent sx={{ p: { xs: 3, md: 5 } }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', mb: 2, textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a201b', mb: 2, textAlign: 'center' }}>
             {exam.title}
           </Typography>
           
-          <Typography variant="body1" sx={{ color: '#475569', mb: 4, textAlign: 'center', px: { md: 4 } }}>
+          <Typography variant="body1" sx={{ color: '#5c6b5e', mb: 4, textAlign: 'center', px: { md: 4 } }}>
             {exam.description || 'Tidak ada deskripsi ujian.'}
           </Typography>
 
@@ -106,36 +106,36 @@ export default function ExamPreparationPage({ params }: { params: Promise<{ id: 
 
           <Grid container spacing={3} sx={{ mb: 5 }}>
             <Grid size={{ xs: 12, sm: 4 }} sx={{ textAlign: 'center' }}>
-              <Typography variant="body2" sx={{ color: '#64748b', mb: 1, fontWeight: 600, textTransform: 'uppercase' }}>
+              <Typography variant="body2" sx={{ color: '#78867a', mb: 1, fontWeight: 600, textTransform: 'uppercase' }}>
                 Waktu Mulai
               </Typography>
-              <Typography variant="h6" sx={{ color: '#0ea5e9', fontWeight: 700 }}>
+              <Typography variant="h6" sx={{ color: '#789276', fontWeight: 700 }}>
                 {startDate.toLocaleString('id-ID', { timeStyle: 'short', dateStyle: 'medium' })}
               </Typography>
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }} sx={{ textAlign: 'center' }}>
-              <Typography variant="body2" sx={{ color: '#64748b', mb: 1, fontWeight: 600, textTransform: 'uppercase' }}>
+              <Typography variant="body2" sx={{ color: '#78867a', mb: 1, fontWeight: 600, textTransform: 'uppercase' }}>
                 Durasi
               </Typography>
-              <Typography variant="h6" sx={{ color: '#0ea5e9', fontWeight: 700 }}>
+              <Typography variant="h6" sx={{ color: '#789276', fontWeight: 700 }}>
                 {exam.durationMinutes} Menit
               </Typography>
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }} sx={{ textAlign: 'center' }}>
-              <Typography variant="body2" sx={{ color: '#64748b', mb: 1, fontWeight: 600, textTransform: 'uppercase' }}>
+              <Typography variant="body2" sx={{ color: '#78867a', mb: 1, fontWeight: 600, textTransform: 'uppercase' }}>
                 Jumlah Soal
               </Typography>
-              <Typography variant="h6" sx={{ color: '#0ea5e9', fontWeight: 700 }}>
+              <Typography variant="h6" sx={{ color: '#789276', fontWeight: 700 }}>
                 {exam._count.questions} Soal
               </Typography>
             </Grid>
           </Grid>
 
-          <Box sx={{ bgcolor: '#f8fafc', p: 3, borderRadius: '12px', mb: 4, border: '1px solid #e2e8f0' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, color: '#1e293b' }}>
+          <Box sx={{ bgcolor: '#faf9f6', p: 3, borderRadius: '12px', mb: 4, border: '1px solid #e8e6df' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, color: '#2c352d' }}>
               Perhatian:
             </Typography>
-            <ul style={{ margin: 0, paddingLeft: '20px', color: '#475569', fontSize: '0.875rem' }}>
+            <ul style={{ margin: 0, paddingLeft: '20px', color: '#5c6b5e', fontSize: '0.875rem' }}>
               <li>Pastikan koneksi internet stabil sebelum memulai.</li>
               <li>Waktu (timer) akan langsung berjalan setelah Anda menekan tombol "Mulai Ujian".</li>
               <li>Ujian akan tersubmit otomatis apabila waktu telah habis.</li>

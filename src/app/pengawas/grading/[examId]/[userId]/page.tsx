@@ -137,16 +137,16 @@ export default function PengawasGradingFormPage({ params }: { params: Promise<{ 
   return (
     <Box>
       <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Button component={Link} href={`/pengawas/grading/${examId}`} startIcon={<ArrowBackIcon />} sx={{ width: 'fit-content', mb: 1, color: '#64748b' }}>
+        <Button component={Link} href={`/pengawas/grading/${examId}`} startIcon={<ArrowBackIcon />} sx={{ width: 'fit-content', mb: 1, color: '#78867a' }}>
           Kembali
         </Button>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a201b', letterSpacing: '-0.02em' }}>
           Form Penilaian Esai
         </Typography>
-        <Typography variant="h6" sx={{ color: '#334155', fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ color: '#425045', fontWeight: 600 }}>
           {data?.exam.title}
         </Typography>
-        <Typography variant="body1" sx={{ color: '#0ea5e9', fontWeight: 600 }}>
+        <Typography variant="body1" sx={{ color: '#789276', fontWeight: 600 }}>
           Peserta: {data?.participant.name} ({data?.participant.email})
         </Typography>
       </Box>
@@ -156,28 +156,28 @@ export default function PengawasGradingFormPage({ params }: { params: Promise<{ 
       <form onSubmit={handleSubmit}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           {data?.essayAnswers.map((ans, index) => (
-            <Card key={ans.id} sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+            <Card key={ans.id} sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e8e6df' }}>
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                   <Box sx={{ 
                     minWidth: 32, height: 32, borderRadius: '8px', bgcolor: '#f1f5f9', 
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
-                    fontWeight: 800, color: '#0ea5e9'
+                    fontWeight: 800, color: '#789276'
                   }}>
                     {index + 1}
                   </Box>
-                  <Typography variant="body1" sx={{ fontSize: '1.1rem', fontWeight: 500, color: '#1e293b', whiteSpace: 'pre-wrap', pt: 0.5 }}>
+                  <Typography variant="body1" sx={{ fontSize: '1.1rem', fontWeight: 500, color: '#2c352d', whiteSpace: 'pre-wrap', pt: 0.5 }}>
                     {ans.question.text}
                   </Typography>
                 </Box>
 
                 <Box sx={{ pl: { xs: 0, sm: 6 }, mb: 4 }}>
-                  <Typography variant="caption" sx={{ fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: '#78867a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Jawaban Peserta:
                   </Typography>
-                  <Box sx={{ mt: 1, p: 3, bgcolor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                    <Typography variant="body1" sx={{ color: '#334155', whiteSpace: 'pre-wrap' }}>
-                      {ans.answer || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>(Kosong)</span>}
+                  <Box sx={{ mt: 1, p: 3, bgcolor: '#faf9f6', borderRadius: '12px', border: '1px solid #e8e6df' }}>
+                    <Typography variant="body1" sx={{ color: '#425045', whiteSpace: 'pre-wrap' }}>
+                      {ans.answer || <span style={{ color: '#a3aca4', fontStyle: 'italic' }}>(Kosong)</span>}
                     </Typography>
                   </Box>
                 </Box>
@@ -185,7 +185,7 @@ export default function PengawasGradingFormPage({ params }: { params: Promise<{ 
                 <Divider sx={{ mb: 3 }} />
 
                 <Box sx={{ pl: { xs: 0, sm: 6 }, display: 'flex', alignItems: 'center', gap: 3 }}>
-                  <Typography variant="body1" sx={{ fontWeight: 600, color: '#0f172a' }}>
+                  <Typography variant="body1" sx={{ fontWeight: 600, color: '#1a201b' }}>
                     Beri Nilai (0 - 100):
                   </Typography>
                   <TextField

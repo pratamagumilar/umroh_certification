@@ -105,7 +105,7 @@ export default function ProfilePage() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 800, mb: 3, color: '#0f172a' }}>
+      <Typography variant="h5" sx={{ fontWeight: 800, mb: 3, color: '#1a201b' }}>
         Profil Saya
       </Typography>
 
@@ -119,7 +119,7 @@ export default function ProfilePage() {
               <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Avatar
                   src={photoUrl || undefined}
-                  sx={{ width: 120, height: 120, mb: 2, bgcolor: '#e2e8f0', color: '#94a3b8' }}
+                  sx={{ width: 120, height: 120, mb: 2, bgcolor: '#e8e6df', color: '#a3aca4' }}
                 >
                   {!photoUrl && <PersonIcon sx={{ fontSize: 60 }} />}
                 </Avatar>
@@ -138,7 +138,7 @@ export default function ProfilePage() {
                 >
                   Ubah Foto Profil
                 </Button>
-                <Typography variant="caption" sx={{ mt: 1, color: '#64748b', textAlign: 'center' }}>
+                <Typography variant="caption" sx={{ mt: 1, color: '#78867a', textAlign: 'center' }}>
                   Format JPG/PNG, maks 2MB.
                 </Typography>
               </Grid>

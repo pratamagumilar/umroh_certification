@@ -76,10 +76,10 @@ function AdminCertificatesContent() {
   return (
     <Box>
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a' }}>
+        <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a201b' }}>
           Kelola Sertifikat
         </Typography>
-        <Typography variant="body2" sx={{ color: '#64748b' }}>
+        <Typography variant="body2" sx={{ color: '#78867a' }}>
           Terbitkan sertifikat untuk peserta yang telah lulus ujian.
         </Typography>
       </Box>
@@ -90,7 +90,7 @@ function AdminCertificatesContent() {
       <TableContainer component={Paper} sx={{ borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9' }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: '#f8fafc' }}>
+            <TableRow sx={{ bgcolor: '#faf9f6' }}>
               <TableCell sx={{ fontWeight: 700 }}>Peserta</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Ujian</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Status Sertifikat</TableCell>
@@ -106,7 +106,7 @@ function AdminCertificatesContent() {
               </TableRow>
             ) : data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} align="center" sx={{ py: 4, color: '#94a3b8' }}>
+                <TableCell colSpan={4} align="center" sx={{ py: 4, color: '#a3aca4' }}>
                   Belum ada peserta yang lulus ujian.
                 </TableCell>
               </TableRow>

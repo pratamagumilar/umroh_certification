@@ -3,13 +3,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
-  Box, Typography, Button, Card, CardContent, Chip, IconButton,
+  Box, Typography, Button, Card, CardContent, Chip,
   Dialog, DialogTitle, DialogContent, DialogActions, Alert, CircularProgress, Paper,
-  List, ListItem, ListItemText, Checkbox, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent
+  FormControl, InputLabel, Select, MenuItem, SelectChangeEvent
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Question {
   id: string;
@@ -49,15 +48,12 @@ export default function ExamDetailPage() {
 
   // Dialogs
   const [selectBankOpen, setSelectBankOpen] = useState(false);
-  const [deleteMappingOpen, setDeleteMappingOpen] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [formLoading, setFormLoading] = useState(false);
 
   // Bank Soal Selection states
   const [banks, setBanks] = useState<QuestionBank[]>([]);
   const [selectedBankId, setSelectedBankId] = useState<string>('');
   const [bankQuestions, setBankQuestions] = useState<Question[]>([]);
-  const [selectedQuestionIds, setSelectedQuestionIds] = useState<string[]>([]);
   const [banksLoading, setBanksLoading] = useState(false);
 
   const fetchExam = useCallback(async () => {
@@ -70,10 +66,6 @@ export default function ExamDetailPage() {
       }
       const data = await res.json();
       setExam(data);
-      // set already selected questions
-      if (data.questions) {
-        setSelectedQuestionIds(data.questions.map((q: Question) => q.id));
-      }
     } catch {
       setError('Gagal memuat data ujian.');
     } finally {
@@ -108,6 +100,7 @@ export default function ExamDetailPage() {
     fetchBanks();
     setBankQuestions([]);
     setSelectedBankId('');
+    setError('');
   };
 
   const handleBankChange = async (e: SelectChangeEvent<string>) => {
@@ -119,29 +112,30 @@ export default function ExamDetailPage() {
       const data = await res.json();
       if (!res.ok) {
         setBankQuestions([]);
-        setSelectedQuestionIds([]);
       } else {
         setBankQuestions(data);
-        setSelectedQuestionIds(data.map((q: Question) => q.id));
       }
     } catch {
       setBankQuestions([]);
-      setSelectedQuestionIds([]);
     } finally {
       setBanksLoading(false);
     }
   };
 
-
-
   const handleSaveMapping = async () => {
+    const questionIds = bankQuestions.map((q) => q.id);
+    if (!selectedBankId || questionIds.length === 0) {
+      setError('Pilih bank soal yang berisi soal terlebih dahulu.');
+      return;
+    }
+
     setFormLoading(true);
     setError('');
     try {
       const res = await fetch(`/api/admin/exams/${examId}/questions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ questionIds: selectedQuestionIds }),
+        body: JSON.stringify({ questionIds }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -154,34 +148,6 @@ export default function ExamDetailPage() {
       }
     } catch {
       setError('Gagal menyimpan soal.');
-    } finally {
-      setFormLoading(false);
-    }
-  };
-
-  // Remove single mapping quickly (simulates unchecking and saving)
-  const handleRemoveMapping = async () => {
-    if (!selectedQuestion) return;
-    setFormLoading(true);
-    try {
-      const newIds = (exam?.questions || []).filter(q => q.id !== selectedQuestion.id).map(q => q.id);
-      const res = await fetch(`/api/admin/exams/${examId}/questions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ questionIds: newIds }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.message);
-      } else {
-        setSuccess('Soal berhasil dihapus dari ujian ini!');
-        setDeleteMappingOpen(false);
-        setSelectedQuestion(null);
-        fetchExam();
-        setTimeout(() => setSuccess(''), 3000);
-      }
-    } catch {
-      setError('Gagal menghapus soal.');
     } finally {
       setFormLoading(false);
     }
@@ -207,11 +173,11 @@ export default function ExamDetailPage() {
 
       <Card sx={{ mb: 4, borderRadius: '16px' }}>
         <CardContent sx={{ p: 4 }}>
-          <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#0f172a' }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#1a201b' }}>
             {exam.title}
           </Typography>
           {exam.description && (
-            <Typography variant="body1" sx={{ color: '#64748b', mb: 3 }}>
+            <Typography variant="body1" sx={{ color: '#78867a', mb: 3 }}>
               {exam.description}
             </Typography>
           )}
@@ -230,7 +196,7 @@ export default function ExamDetailPage() {
       {success && <Alert severity="success" sx={{ mb: 2, borderRadius: 2 }}>{success}</Alert>}
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, mt: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b' }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: '#2c352d' }}>
           Soal Ujian
         </Typography>
         <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenSelectBank} sx={{ borderRadius: '12px' }}>
@@ -239,7 +205,7 @@ export default function ExamDetailPage() {
       </Box>
 
       {!exam.questions || exam.questions.length === 0 ? (
-        <Paper sx={{ p: 4, textAlign: 'center', borderRadius: '12px', bgcolor: '#f8fafc', color: '#64748b' }}>
+        <Paper sx={{ p: 4, textAlign: 'center', borderRadius: '12px', bgcolor: '#faf9f6', color: '#78867a' }}>
           <Typography>Belum ada soal. Silakan pilih soal dari Bank Soal.</Typography>
         </Paper>
       ) : (
@@ -250,19 +216,13 @@ export default function ExamDetailPage() {
               try { opts = JSON.parse(q.options); } catch { /* ignore */ }
             }
             return (
-              <Card key={q.id} sx={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: 'none' }}>
+              <Card key={q.id} sx={{ borderRadius: '12px', border: '1px solid #e8e6df', boxShadow: 'none' }}>
                 <CardContent sx={{ position: 'relative', p: 3 }}>
-                  <Box sx={{ position: 'absolute', top: 16, right: 16, display: 'flex', gap: 0.5 }}>
-                    <IconButton size="small" color="error" onClick={() => { setSelectedQuestion(q); setDeleteMappingOpen(true); }} title="Hapus dari Ujian">
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, pr: 8 }}>
-                    <Typography sx={{ fontWeight: 700, color: '#0ea5e9' }}>{index + 1}.</Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                    <Typography sx={{ fontWeight: 700, color: '#789276' }}>{index + 1}.</Typography>
                     <Box sx={{ flex: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                        <Chip label={q.type === 'PG' ? 'Pilihan Ganda' : 'Esai'} size="small" sx={{ bgcolor: q.type === 'PG' ? '#e0f2fe' : '#fef3c7', color: q.type === 'PG' ? '#0369a1' : '#b45309', fontWeight: 600 }} />
+                        <Chip label={q.type === 'PG' ? 'Pilihan Ganda' : 'Esai'} size="small" sx={{ bgcolor: q.type === 'PG' ? '#e9eee8' : '#fef3c7', color: q.type === 'PG' ? '#596d58' : '#b45309', fontWeight: 600 }} />
                       </Box>
                       <Typography sx={{ whiteSpace: 'pre-wrap', mb: 2 }}>{q.text}</Typography>
                       {q.type === 'PG' && opts && (
@@ -270,9 +230,9 @@ export default function ExamDetailPage() {
                           {['A', 'B', 'C', 'D'].map((optKey) => {
                             const isCorrect = q.correctAnswer === optKey;
                             return (
-                              <Paper key={optKey} sx={{ p: 1.5, display: 'flex', gap: 2, alignItems: 'center', bgcolor: isCorrect ? '#ecfdf5' : '#f8fafc', border: `1px solid ${isCorrect ? '#10b981' : '#e2e8f0'}`, borderRadius: '8px' }}>
-                                <Typography sx={{ fontWeight: 700, color: isCorrect ? '#047857' : '#64748b' }}>{optKey}</Typography>
-                                <Typography sx={{ color: isCorrect ? '#047857' : '#334155' }}>{opts[optKey]}</Typography>
+                              <Paper key={optKey} sx={{ p: 1.5, display: 'flex', gap: 2, alignItems: 'center', bgcolor: isCorrect ? '#ecfdf5' : '#faf9f6', border: `1px solid ${isCorrect ? '#10b981' : '#e8e6df'}`, borderRadius: '8px' }}>
+                                <Typography sx={{ fontWeight: 700, color: isCorrect ? '#047857' : '#78867a' }}>{optKey}</Typography>
+                                <Typography sx={{ color: isCorrect ? '#047857' : '#425045' }}>{opts[optKey]}</Typography>
                                 {isCorrect && <Chip label="Kunci" size="small" color="success" sx={{ ml: 'auto', height: 20 }} />}
                               </Paper>
                             );
@@ -317,30 +277,17 @@ export default function ExamDetailPage() {
           ) : null}
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2, justifyContent: 'space-between' }}>
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>Total Terpilih: {selectedQuestionIds.length}</Typography>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>Total dari bank: {bankQuestions.length}</Typography>
           <Box>
             <Button onClick={() => setSelectBankOpen(false)}>Batal</Button>
-            <Button variant="contained" onClick={handleSaveMapping} disabled={formLoading}>
+            <Button
+              variant="contained"
+              onClick={handleSaveMapping}
+              disabled={formLoading || !selectedBankId || bankQuestions.length === 0}
+            >
               {formLoading ? 'Menyimpan...' : 'Simpan Ke Ujian'}
             </Button>
           </Box>
-        </DialogActions>
-      </Dialog>
-
-      {/* Delete Confirmation */}
-      <Dialog open={deleteMappingOpen} onClose={() => setDeleteMappingOpen(false)}>
-        <DialogTitle sx={{ fontWeight: 700 }}>Konfirmasi Hapus dari Ujian</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Yakin ingin menghapus soal ini dari Ujian? 
-            (Soal tetap ada di Bank Soal)
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setDeleteMappingOpen(false)}>Batal</Button>
-          <Button variant="contained" color="error" onClick={handleRemoveMapping} disabled={formLoading}>
-            {formLoading ? 'Menghapus...' : 'Hapus dari Ujian'}
-          </Button>
         </DialogActions>
       </Dialog>
     </Box>

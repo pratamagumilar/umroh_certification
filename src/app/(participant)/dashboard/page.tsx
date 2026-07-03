@@ -75,19 +75,19 @@ export default function DashboardPage() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 800, mb: 4, color: '#0f172a' }}>
+      <Typography variant="h5" sx={{ fontWeight: 800, mb: 4, color: '#1a201b' }}>
         Dashboard Peserta
       </Typography>
 
       <Grid container spacing={4}>
         {/* Active Exams */}
         <Grid size={{ xs: 12, md: 8 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#1e293b' }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#2c352d' }}>
             Ujian Tersedia
           </Typography>
           
           {data?.activeExams.length === 0 ? (
-            <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid #e2e8f0', bgcolor: '#f8fafc' }}>
+            <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid #e8e6df', bgcolor: '#faf9f6' }}>
               <CardContent sx={{ py: 4, textAlign: 'center' }}>
                 <Typography color="text.secondary">Belum ada ujian yang tersedia untuk Anda saat ini.</Typography>
               </CardContent>
@@ -95,13 +95,13 @@ export default function DashboardPage() {
           ) : (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {data?.activeExams.map((exam) => (
-                <Card key={exam.id} sx={{ borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+                <Card key={exam.id} sx={{ borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: '1px solid #e8e6df' }}>
                   <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                     <Box>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#0ea5e9', mb: 0.5 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#789276', mb: 0.5 }}>
                         {exam.title}
                       </Typography>
-                      <Box sx={{ display: 'flex', gap: 2, color: '#64748b' }}>
+                      <Box sx={{ display: 'flex', gap: 2, color: '#78867a' }}>
                         <Typography variant="body2">⏰ {exam.durationMinutes} Menit</Typography>
                         <Typography variant="body2">📅 {new Date(exam.startTime).toLocaleString('id-ID')}</Typography>
                       </Box>
@@ -124,12 +124,12 @@ export default function DashboardPage() {
 
         {/* Certificates & Results */}
         <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#1e293b' }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#2c352d' }}>
             Sertifikat Saya
           </Typography>
           
           {data?.certificates.length === 0 ? (
-            <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid #e2e8f0', bgcolor: '#f8fafc', mb: 4 }}>
+            <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid #e8e6df', bgcolor: '#faf9f6', mb: 4 }}>
               <CardContent sx={{ py: 3, textAlign: 'center' }}>
                 <Typography variant="body2" color="text.secondary">Belum ada sertifikat.</Typography>
               </CardContent>
@@ -159,12 +159,12 @@ export default function DashboardPage() {
             </Box>
           )}
 
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#1e293b' }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#2c352d' }}>
             Riwayat Ujian
           </Typography>
 
           {data?.results.length === 0 ? (
-            <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid #e2e8f0', bgcolor: '#f8fafc' }}>
+            <Card sx={{ borderRadius: '12px', boxShadow: 'none', border: '1px solid #e8e6df', bgcolor: '#faf9f6' }}>
               <CardContent sx={{ py: 3, textAlign: 'center' }}>
                 <Typography variant="body2" color="text.secondary">Belum ada riwayat ujian.</Typography>
               </CardContent>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
           ) : (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {data?.results.map((res) => (
-                <Card key={res.id} sx={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: 'none' }}>
+                <Card key={res.id} sx={{ borderRadius: '12px', border: '1px solid #e8e6df', boxShadow: 'none' }}>
                   <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
                       {res.exam.title}

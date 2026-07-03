@@ -50,7 +50,7 @@ export default function AdminSidebar() {
   const searchParams = useSearchParams();
   const currentRole = searchParams.get('role');
 
-  const [openUsers, setOpenUsers] = useState(true); // Default open
+  const [openUsers, setOpenUsers] = useState(true);
 
   const handleToggleUsers = () => {
     setOpenUsers(!openUsers);
@@ -65,26 +65,26 @@ export default function AdminSidebar() {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
-          background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
-          color: '#e2e8f0',
-          borderRight: 'none',
+          backgroundColor: '#ffffff', // Bright background
+          color: '#425045', // Dark Sage gray text
+          borderRight: '1px solid #e8e6df', // Subtle border
         },
       }}
     >
       <Toolbar sx={{ px: 3, py: 2.5 }}>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a201b', letterSpacing: '-0.02em' }}>
             ☪ Sertifikasi
           </Typography>
-          <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: '0.7rem' }}>
+          <Typography variant="caption" sx={{ color: '#78867a', fontSize: '0.75rem', fontWeight: 600 }}>
             Panel Admin
           </Typography>
         </Box>
       </Toolbar>
 
-      <Divider sx={{ borderColor: 'rgba(148, 163, 184, 0.15)' }} />
+      <Divider sx={{ borderColor: '#e8e6df', mb: 2 }} />
 
-      <List sx={{ px: 1.5, pt: 2 }}>
+      <List sx={{ px: 1.5 }}>
         {menuItems.map((item) => {
           if (item.subItems) {
             const isBaseActive = pathname === item.basePath || pathname.startsWith(item.basePath + '/');
@@ -97,11 +97,11 @@ export default function AdminSidebar() {
                       borderRadius: '12px',
                       py: 1.2,
                       px: 2,
-                      backgroundColor: isBaseActive ? 'rgba(14, 165, 233, 0.05)' : 'transparent',
-                      color: isBaseActive ? '#e0f2fe' : '#94a3b8',
+                      backgroundColor: isBaseActive ? 'rgba(120, 146, 118, 0.1)' : 'transparent',
+                      color: isBaseActive ? '#596d58' : '#5c6b5e',
                       '&:hover': {
-                        backgroundColor: 'rgba(148, 163, 184, 0.08)',
-                        color: '#fff',
+                        backgroundColor: 'rgba(120, 146, 118, 0.08)',
+                        color: '#2c352d',
                       },
                       transition: 'all 0.15s ease',
                     }}
@@ -125,7 +125,6 @@ export default function AdminSidebar() {
                 <Collapse in={openUsers} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {item.subItems.map((subItem) => {
-                      // Cek active state
                       let isActive = false;
                       if (subItem.href === '/admin/users' && !currentRole) isActive = true;
                       if (subItem.href.includes('role=') && currentRole && subItem.href.includes(`role=${currentRole}`)) {
@@ -142,13 +141,13 @@ export default function AdminSidebar() {
                             py: 1,
                             pl: 7,
                             mb: 0.5,
-                            backgroundColor: isActive ? 'rgba(14, 165, 233, 0.15)' : 'transparent',
-                            color: isActive ? '#38bdf8' : '#64748b',
+                            backgroundColor: isActive ? 'rgba(120, 146, 118, 0.15)' : 'transparent',
+                            color: isActive ? '#596d58' : '#78867a',
                             '&:hover': {
                               backgroundColor: isActive
-                                ? 'rgba(14, 165, 233, 0.2)'
-                                : 'rgba(148, 163, 184, 0.08)',
-                              color: '#fff',
+                                ? 'rgba(120, 146, 118, 0.2)'
+                                : 'rgba(120, 146, 118, 0.08)',
+                              color: '#2c352d',
                             },
                           }}
                         >
@@ -158,7 +157,7 @@ export default function AdminSidebar() {
                               primary: {
                                 sx: {
                                   fontSize: '0.85rem',
-                                  fontWeight: isActive ? 600 : 400,
+                                  fontWeight: isActive ? 600 : 500,
                                 },
                               },
                             }}
@@ -182,13 +181,13 @@ export default function AdminSidebar() {
                   borderRadius: '12px',
                   py: 1.2,
                   px: 2,
-                  backgroundColor: isActive ? 'rgba(14, 165, 233, 0.15)' : 'transparent',
-                  color: isActive ? '#38bdf8' : '#94a3b8',
+                  backgroundColor: isActive ? 'rgba(120, 146, 118, 0.15)' : 'transparent',
+                  color: isActive ? '#596d58' : '#5c6b5e',
                   '&:hover': {
                     backgroundColor: isActive
-                      ? 'rgba(14, 165, 233, 0.2)'
-                      : 'rgba(148, 163, 184, 0.08)',
-                    color: '#fff',
+                      ? 'rgba(120, 146, 118, 0.2)'
+                      : 'rgba(120, 146, 118, 0.08)',
+                    color: '#2c352d',
                   },
                   transition: 'all 0.15s ease',
                 }}

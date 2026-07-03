@@ -39,26 +39,26 @@ export default function PengawasSidebar() {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
-          background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
-          color: '#e2e8f0',
-          borderRight: 'none',
+          backgroundColor: '#ffffff', // Bright background
+          color: '#425045', // Dark Sage gray text
+          borderRight: '1px solid #e8e6df', // Subtle border
         },
       }}
     >
       <Toolbar sx={{ px: 3, py: 2.5 }}>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a201b', letterSpacing: '-0.02em' }}>
             ☪ Sertifikasi
           </Typography>
-          <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: '0.7rem' }}>
+          <Typography variant="caption" sx={{ color: '#78867a', fontSize: '0.75rem', fontWeight: 600 }}>
             Panel Pengawas
           </Typography>
         </Box>
       </Toolbar>
 
-      <Divider sx={{ borderColor: 'rgba(148, 163, 184, 0.15)' }} />
+      <Divider sx={{ borderColor: '#e8e6df', mb: 2 }} />
 
-      <List sx={{ px: 1.5, pt: 2 }}>
+      <List sx={{ px: 1.5 }}>
         {menuItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
@@ -70,13 +70,13 @@ export default function PengawasSidebar() {
                   borderRadius: '12px',
                   py: 1.2,
                   px: 2,
-                  backgroundColor: isActive ? 'rgba(244, 63, 94, 0.15)' : 'transparent', // Menggunakan warna sekunder (rose)
-                  color: isActive ? '#fb7185' : '#94a3b8',
+                  backgroundColor: isActive ? 'rgba(120, 146, 118, 0.15)' : 'transparent',
+                  color: isActive ? '#596d58' : '#5c6b5e',
                   '&:hover': {
                     backgroundColor: isActive
-                      ? 'rgba(244, 63, 94, 0.2)'
-                      : 'rgba(148, 163, 184, 0.08)',
-                    color: '#fff',
+                      ? 'rgba(120, 146, 118, 0.2)'
+                      : 'rgba(120, 146, 118, 0.08)',
+                    color: '#2c352d',
                   },
                   transition: 'all 0.15s ease',
                 }}

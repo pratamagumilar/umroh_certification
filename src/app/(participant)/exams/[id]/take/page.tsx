@@ -161,18 +161,18 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          border: '1px solid #e2e8f0'
+          border: '1px solid #e8e6df'
         }}
       >
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#0f172a' }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#1a201b' }}>
             {data.exam.title}
           </Typography>
-          <Typography variant="body2" sx={{ color: '#64748b' }}>
+          <Typography variant="body2" sx={{ color: '#78867a' }}>
             Jawab semua soal sebelum waktu habis.
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: isWarningTime ? '#ef4444' : '#0ea5e9' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: isWarningTime ? '#ef4444' : '#789276' }}>
           <AccessTimeIcon fontSize="large" />
           <Typography variant="h5" sx={{ fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
             {timeLeft !== null ? formatTime(timeLeft) : '--:--'}
@@ -191,7 +191,7 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
             }
 
             return (
-              <Card key={q.id} sx={{ borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+              <Card key={q.id} sx={{ borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e8e6df' }}>
                 <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                   <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                     <Box sx={{ 
@@ -203,11 +203,11 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
                       justifyContent: 'center', 
                       alignItems: 'center',
                       fontWeight: 800,
-                      color: '#0ea5e9'
+                      color: '#789276'
                     }}>
                       {index + 1}
                     </Box>
-                    <Typography variant="body1" sx={{ fontSize: '1.1rem', fontWeight: 500, color: '#1e293b', whiteSpace: 'pre-wrap', pt: 0.5 }}>
+                    <Typography variant="body1" sx={{ fontSize: '1.1rem', fontWeight: 500, color: '#2c352d', whiteSpace: 'pre-wrap', pt: 0.5 }}>
                       {q.text}
                     </Typography>
                   </Box>
@@ -222,25 +222,25 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
                               sx={{ 
                                 p: 1, 
                                 borderRadius: '12px',
-                                bgcolor: answers[q.id] === optKey ? '#e0f2fe' : 'transparent',
-                                borderColor: answers[q.id] === optKey ? '#0ea5e9' : '#e2e8f0',
+                                bgcolor: answers[q.id] === optKey ? '#e9eee8' : 'transparent',
+                                borderColor: answers[q.id] === optKey ? '#789276' : '#e8e6df',
                                 cursor: 'pointer',
                                 transition: 'all 0.2s',
-                                '&:hover': { bgcolor: '#f8fafc', borderColor: '#cbd5e1' }
+                                '&:hover': { bgcolor: '#faf9f6', borderColor: '#cbd5e1' }
                               }}
                               onClick={() => handleAnswerChange(q.id, optKey)}
                             >
                               <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', width: '100%', p: 1 }}>
                                 <Box sx={{ 
                                   width: 28, height: 28, borderRadius: '50%', 
-                                  bgcolor: answers[q.id] === optKey ? '#0ea5e9' : '#f1f5f9', 
-                                  color: answers[q.id] === optKey ? '#fff' : '#64748b',
+                                  bgcolor: answers[q.id] === optKey ? '#789276' : '#f1f5f9', 
+                                  color: answers[q.id] === optKey ? '#fff' : '#78867a',
                                   display: 'flex', justifyContent: 'center', alignItems: 'center',
                                   fontWeight: 700, fontSize: '0.875rem'
                                 }}>
                                   {optKey}
                                 </Box>
-                                <Typography sx={{ flex: 1, color: '#334155' }}>{opts[optKey]}</Typography>
+                                <Typography sx={{ flex: 1, color: '#425045' }}>{opts[optKey]}</Typography>
                               </Box>
                             </Paper>
                           </Grid>
@@ -260,7 +260,7 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
                         sx={{
                           '& .MuiOutlinedInput-root': {
                             borderRadius: '12px',
-                            bgcolor: '#f8fafc'
+                            bgcolor: '#faf9f6'
                           }
                         }}
                       />

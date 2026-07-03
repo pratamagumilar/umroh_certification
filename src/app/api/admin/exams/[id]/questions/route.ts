@@ -36,7 +36,8 @@ export async function GET(
   }
 }
 
-// Menerima array questionIds dan menghubungkannya ke ujian
+// Menerima array questionIds dan menambahkan relasi soal ke ujian.
+// Endpoint ini tidak menghapus mapping lama agar soal dari bank soal tidak bisa dihapus manual dari kelola ujian.
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -55,14 +56,23 @@ export async function POST(
       return NextResponse.json({ message: 'questionIds harus berupa array' }, { status: 400 });
     }
 
-    // Gunakan transaction: hapus mapping lama, buat mapping baru
-    // Atau bisa hanya append (tergantung kebutuhan, di sini kita replace saja)
+    const uniqueQuestionIds = Array.from(new Set(questionIds.filter((qId) => typeof qId === 'string' && qId.trim() !== '')));
+
+    if (uniqueQuestionIds.length === 0) {
+      return NextResponse.json({ message: 'Pilih minimal satu soal dari bank soal' }, { status: 400 });
+    }
+
     await prisma.$transaction(async (tx) => {
-      await tx.examQuestion.deleteMany({
-        where: { examId },
+      const existingMappings = await tx.examQuestion.findMany({
+        where: {
+          examId,
+          questionId: { in: uniqueQuestionIds },
+        },
+        select: { questionId: true },
       });
 
-      const dataToInsert = questionIds.map((qId) => ({
+      const existingQuestionIds = new Set(existingMappings.map((mapping) => mapping.questionId));
+      const dataToInsert = uniqueQuestionIds.filter((qId) => !existingQuestionIds.has(qId)).map((qId) => ({
         examId,
         questionId: qId,
       }));

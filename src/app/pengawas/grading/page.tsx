@@ -50,10 +50,10 @@ export default function PengawasGradingPage() {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, letterSpacing: '-0.02em' }}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a201b', mb: 1, letterSpacing: '-0.02em' }}>
           Penilaian Esai
         </Typography>
-        <Typography variant="body1" sx={{ color: '#64748b' }}>
+        <Typography variant="body1" sx={{ color: '#78867a' }}>
           Daftar ujian yang memiliki jawaban esai untuk dinilai.
         </Typography>
       </Box>
@@ -67,23 +67,23 @@ export default function PengawasGradingPage() {
       <Grid container spacing={3}>
         {exams.map((exam) => (
           <Grid size={{ xs: 12, md: 6 }} key={exam.id}>
-            <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e8e6df', height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b', mb: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#2c352d', mb: 1 }}>
                   {exam.title}
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#64748b', mb: 2 }}>
+                <Typography variant="body2" sx={{ color: '#78867a', mb: 2 }}>
                   {format(new Date(exam.startTime), "d MMMM yyyy, HH:mm", { locale: id })} WIB
                 </Typography>
                 
-                <Box sx={{ display: 'flex', gap: 3, mb: 3, bgcolor: '#f8fafc', p: 2, borderRadius: '12px' }}>
+                <Box sx={{ display: 'flex', gap: 3, mb: 3, bgcolor: '#faf9f6', p: 2, borderRadius: '12px' }}>
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600 }}>Peserta (Pending)</Typography>
-                    <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a' }}>{exam.pendingParticipantsCount}</Typography>
+                    <Typography variant="caption" sx={{ color: '#78867a', fontWeight: 600 }}>Peserta (Pending)</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a201b' }}>{exam.pendingParticipantsCount}</Typography>
                   </Box>
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600 }}>Total Esai (Pending)</Typography>
-                    <Typography variant="h5" sx={{ fontWeight: 800, color: '#f43f5e' }}>{exam.pendingEssaysCount}</Typography>
+                    <Typography variant="caption" sx={{ color: '#78867a', fontWeight: 600 }}>Total Esai (Pending)</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: 800, color: '#d4b886' }}>{exam.pendingEssaysCount}</Typography>
                   </Box>
                 </Box>
 

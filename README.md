@@ -85,6 +85,7 @@ Pengembangan dilakukan bertahap per POV. Prioritas: **Admin → Peserta → Peng
 - [x] UI: Halaman kelola Bank Soal (List, Create, Update, Delete).
 - [x] UI: Detail Bank Soal (Kelola Daftar Soal, Import Excel).
 - [x] UI: Refactor halaman Detail Ujian agar langsung memilih Bank Soal (semua soal otomatis masuk ke ujian).
+- [x] Aturan Kelola Ujian: Soal yang sudah dipilih dari Bank Soal tidak bisa dihapus manual per soal dari detail ujian.
 
 #### 1.4 Kelola Ujian
 - [x] Tabel daftar ujian
@@ -154,7 +155,8 @@ Pengembangan dilakukan bertahap per POV. Prioritas: **Admin → Peserta → Peng
 - **Tidak ada registrasi publik.** Semua akun (Peserta, Pengawas) dibuatkan oleh Admin.
 - **1 akun = 1 role.** Tidak ada multi-role per akun.
 - **Bulk import Excel** tersedia untuk data user dan soal ujian.
+- **Kelola Ujian memakai Bank Soal sebagai sumber soal.** Setelah soal dari Bank Soal masuk ke ujian, admin tidak bisa menghapus soal satu per satu dari detail ujian.
 - **Saat ini fokus di FASE 1 (Admin).**
 
 ---
-*Terakhir diupdate: 23 Juni 2026*
+*Terakhir diupdate: 3 Juli 2026*

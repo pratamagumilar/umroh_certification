@@ -17,7 +17,7 @@ export default async function PengawasLayout({
   }
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#f8fafc" }}>
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#faf9f6" }}>
       <PengawasSidebar />
       <Box
         component="main"

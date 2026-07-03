@@ -8,10 +8,10 @@ import React from 'react';
 const theme = createTheme({
   palette: {
     mode: 'light',
-    primary: { main: '#0ea5e9' }, // Warna biru langit yang modern
-    secondary: { main: '#f43f5e' }, // Warna rose modern
+    primary: { main: '#789276' }, // Hijau Sage
+    secondary: { main: '#d4b886' }, // Warm Sand/Gold
     background: {
-      default: '#f8fafc',
+      default: '#faf9f6', // Creamy off-white
       paper: '#ffffff',
     },
   },

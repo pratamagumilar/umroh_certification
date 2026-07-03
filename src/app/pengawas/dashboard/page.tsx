@@ -51,27 +51,27 @@ export default function PengawasDashboard() {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, letterSpacing: '-0.02em' }}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a201b', mb: 1, letterSpacing: '-0.02em' }}>
           Dashboard Pengawas
         </Typography>
-        <Typography variant="body1" sx={{ color: '#64748b' }}>
+        <Typography variant="body1" sx={{ color: '#78867a' }}>
           Ringkasan tugas pengawasan dan penilaian esai Anda hari ini.
         </Typography>
       </Box>
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ borderRadius: '16px', background: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', boxShadow: 'none' }}>
+          <Card sx={{ borderRadius: '16px', background: 'linear-gradient(135deg, #e9eee8 0%, #d3dcd2 100%)', boxShadow: 'none' }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 4 }}>
-                <Box sx={{ p: 1.5, borderRadius: '12px', bgcolor: '#0ea5e9', color: 'white', display: 'flex' }}>
+                <Box sx={{ p: 1.5, borderRadius: '12px', bgcolor: '#789276', color: 'white', display: 'flex' }}>
                   <VisibilityIcon />
                 </Box>
               </Box>
-              <Typography variant="h3" sx={{ fontWeight: 800, color: '#0369a1', mb: 1 }}>
+              <Typography variant="h3" sx={{ fontWeight: 800, color: '#596d58', mb: 1 }}>
                 {data.activeExamsCount}
               </Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#075985' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#475746' }}>
                 Ujian Sedang Aktif
               </Typography>
             </CardContent>
@@ -79,17 +79,17 @@ export default function PengawasDashboard() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ borderRadius: '16px', background: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', boxShadow: 'none' }}>
+          <Card sx={{ borderRadius: '16px', background: 'linear-gradient(135deg, #f5eedb 0%, #ebddc2 100%)', boxShadow: 'none' }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 4 }}>
-                <Box sx={{ p: 1.5, borderRadius: '12px', bgcolor: '#f43f5e', color: 'white', display: 'flex' }}>
+                <Box sx={{ p: 1.5, borderRadius: '12px', bgcolor: '#d4b886', color: 'white', display: 'flex' }}>
                   <GradingIcon />
                 </Box>
               </Box>
-              <Typography variant="h3" sx={{ fontWeight: 800, color: '#be123c', mb: 1 }}>
+              <Typography variant="h3" sx={{ fontWeight: 800, color: '#ab9267', mb: 1 }}>
                 {data.pendingEssaysCount}
               </Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#9f1239' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#8c7855' }}>
                 Esai Belum Dinilai
               </Typography>
             </CardContent>

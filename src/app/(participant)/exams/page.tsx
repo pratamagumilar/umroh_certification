@@ -51,17 +51,17 @@ export default function ExamsListPage() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#0f172a' }}>
+      <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#1a201b' }}>
         Daftar Ujian
       </Typography>
-      <Typography variant="body1" sx={{ color: '#64748b', mb: 4 }}>
+      <Typography variant="body1" sx={{ color: '#78867a', mb: 4 }}>
         Pilih ujian yang tersedia untuk Anda kerjakan.
       </Typography>
 
       {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
       {exams.length === 0 ? (
-        <Card sx={{ borderRadius: '16px', boxShadow: 'none', border: '1px solid #e2e8f0', bgcolor: '#f8fafc' }}>
+        <Card sx={{ borderRadius: '16px', boxShadow: 'none', border: '1px solid #e8e6df', bgcolor: '#faf9f6' }}>
           <CardContent sx={{ py: 6, textAlign: 'center' }}>
             <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
               Tidak Ada Ujian Aktif
@@ -88,26 +88,26 @@ export default function ExamsListPage() {
                   '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }
                 }}>
                   <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#0ea5e9', mb: 1, lineHeight: 1.3 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#789276', mb: 1, lineHeight: 1.3 }}>
                       {exam.title}
                     </Typography>
                     
-                    <Typography variant="body2" sx={{ color: '#64748b', mb: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <Typography variant="body2" sx={{ color: '#78867a', mb: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {exam.description || 'Tidak ada deskripsi'}
                     </Typography>
                     
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#475569' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#5c6b5e' }}>
                         <ScheduleIcon fontSize="small" />
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
                           {startDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}
                         </Typography>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#475569' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#5c6b5e' }}>
                         <ScheduleIcon fontSize="small" />
                         <Typography variant="body2">Durasi: {exam.durationMinutes} Menit</Typography>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#475569' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#5c6b5e' }}>
                         <AssessmentIcon fontSize="small" />
                         <Typography variant="body2">Jumlah: {exam._count.questions} Soal</Typography>
                       </Box>

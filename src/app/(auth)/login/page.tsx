@@ -56,7 +56,7 @@ export default function LoginPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #f0f9ff 0%, #cbebff 100%)',
+        background: 'linear-gradient(135deg, #f4f6f4 0%, #cbebff 100%)',
         p: 2,
       }}
     >

@@ -78,11 +78,11 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
   return (
     <Box>
       <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Button component={Link} href="/pengawas/exams" startIcon={<ArrowBackIcon />} sx={{ width: 'fit-content', mb: 1, color: '#64748b' }}>
+        <Button component={Link} href="/pengawas/exams" startIcon={<ArrowBackIcon />} sx={{ width: 'fit-content', mb: 1, color: '#78867a' }}>
           Kembali
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a201b', letterSpacing: '-0.02em' }}>
             Monitoring Ujian
           </Typography>
           <Chip 
@@ -92,30 +92,30 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
             sx={{ fontWeight: 700 }}
           />
         </Box>
-        <Typography variant="h6" sx={{ color: '#334155', fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ color: '#425045', fontWeight: 600 }}>
           {data.exam.title}
         </Typography>
-        <Typography variant="body2" sx={{ color: '#64748b' }}>
+        <Typography variant="body2" sx={{ color: '#78867a' }}>
           Halaman ini diperbarui otomatis setiap 10 detik.
         </Typography>
       </Box>
 
-      <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+      <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e8e6df' }}>
         <TableContainer component={Paper} elevation={0} sx={{ borderRadius: '16px' }}>
           <Table>
-            <TableHead sx={{ bgcolor: '#f8fafc' }}>
+            <TableHead sx={{ bgcolor: '#faf9f6' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 700, color: '#475569' }}>Peserta</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#475569' }}>Waktu Mulai</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#475569' }}>Status</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 700, color: '#475569' }}>Skor PG</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 700, color: '#475569' }}>Total Skor</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#5c6b5e' }}>Peserta</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#5c6b5e' }}>Waktu Mulai</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#5c6b5e' }}>Status</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 700, color: '#5c6b5e' }}>Skor PG</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 700, color: '#5c6b5e' }}>Total Skor</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data.participants.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} align="center" sx={{ py: 4, color: '#64748b' }}>
+                  <TableCell colSpan={5} align="center" sx={{ py: 4, color: '#78867a' }}>
                     Belum ada peserta yang memulai ujian ini.
                   </TableCell>
                 </TableRow>
@@ -123,11 +123,11 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
                 data.participants.map((p) => (
                   <TableRow key={p.id} hover>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: '#1e293b' }}>{p.name}</Typography>
-                      <Typography variant="caption" sx={{ color: '#64748b' }}>{p.email}</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: '#2c352d' }}>{p.name}</Typography>
+                      <Typography variant="caption" sx={{ color: '#78867a' }}>{p.email}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2" sx={{ color: '#334155' }}>
+                      <Typography variant="body2" sx={{ color: '#425045' }}>
                         {format(new Date(p.scanTime), "HH:mm:ss", { locale: id })} WIB
                       </Typography>
                     </TableCell>
@@ -143,12 +143,12 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <Typography variant="body2" sx={{ fontWeight: 700, color: '#0f172a' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 700, color: '#1a201b' }}>
                         {p.pgScore !== null ? Math.round(p.pgScore) : '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography variant="body2" sx={{ fontWeight: 800, color: p.status === 'Selesai' ? '#15803d' : '#94a3b8' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 800, color: p.status === 'Selesai' ? '#15803d' : '#a3aca4' }}>
                         {p.totalScore !== null ? Math.round(p.totalScore) : '-'}
                       </Typography>
                     </TableCell>

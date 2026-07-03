@@ -54,10 +54,10 @@ export default function PengawasExamsPage() {
     <Box>
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, letterSpacing: '-0.02em' }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a201b', mb: 1, letterSpacing: '-0.02em' }}>
             Pengawasan Ujian
           </Typography>
-          <Typography variant="body1" sx={{ color: '#64748b' }}>
+          <Typography variant="body1" sx={{ color: '#78867a' }}>
             Pilih ujian untuk memonitor kehadiran dan status peserta.
           </Typography>
         </Box>
@@ -71,11 +71,11 @@ export default function PengawasExamsPage() {
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {exams.map((exam) => (
-          <Card key={exam.id} sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+          <Card key={exam.id} sx={{ borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e8e6df' }}>
             <CardContent sx={{ p: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: '#2c352d' }}>
                     {exam.title}
                   </Typography>
                   <Chip 
@@ -85,10 +85,10 @@ export default function PengawasExamsPage() {
                     sx={{ fontWeight: 700, fontSize: '0.7rem' }}
                   />
                 </Box>
-                <Typography variant="body2" sx={{ color: '#64748b', mb: 0.5 }}>
+                <Typography variant="body2" sx={{ color: '#78867a', mb: 0.5 }}>
                   Waktu: {format(new Date(exam.startTime), "d MMMM yyyy, HH:mm", { locale: id })} WIB
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#64748b' }}>
+                <Typography variant="body2" sx={{ color: '#78867a' }}>
                   Durasi: {exam.durationMinutes} Menit &nbsp;|&nbsp; Peserta Hadir: {exam._count.attendances}
                 </Typography>
               </Box>

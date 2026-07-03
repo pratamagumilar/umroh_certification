@@ -96,10 +96,10 @@ function AdminResultsContent() {
   return (
     <Box>
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a' }}>
+        <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a201b' }}>
           Monitoring Hasil Ujian
         </Typography>
-        <Typography variant="body2" sx={{ color: '#64748b' }}>
+        <Typography variant="body2" sx={{ color: '#78867a' }}>
           Pantau nilai peserta dan tentukan status kelulusan secara manual jika diperlukan.
         </Typography>
       </Box>
@@ -110,7 +110,7 @@ function AdminResultsContent() {
       <TableContainer component={Paper} sx={{ borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9' }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: '#f8fafc' }}>
+            <TableRow sx={{ bgcolor: '#faf9f6' }}>
               <TableCell sx={{ fontWeight: 700 }}>Peserta</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Ujian</TableCell>
               <TableCell sx={{ fontWeight: 700 }} align="center">PG</TableCell>
@@ -129,7 +129,7 @@ function AdminResultsContent() {
               </TableRow>
             ) : results.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 4, color: '#94a3b8' }}>
+                <TableCell colSpan={7} align="center" sx={{ py: 4, color: '#a3aca4' }}>
                   Belum ada data hasil ujian.
                 </TableCell>
               </TableRow>
@@ -176,7 +176,7 @@ function AdminResultsContent() {
         <DialogContent sx={{ pt: '16px !important' }}>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           {selectedResult && (
-            <Box sx={{ mb: 3, p: 2, bgcolor: '#f8fafc', borderRadius: 2 }}>
+            <Box sx={{ mb: 3, p: 2, bgcolor: '#faf9f6', borderRadius: 2 }}>
               <Typography variant="body2">Peserta: <strong>{selectedResult.user.name}</strong></Typography>
               <Typography variant="body2">Ujian: <strong>{selectedResult.exam.title}</strong></Typography>
               <Typography variant="body2">Total Nilai: <strong>{selectedResult.pgScore + selectedResult.essayScore}</strong></Typography>

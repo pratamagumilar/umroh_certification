@@ -208,10 +208,10 @@ export default function AdminExamsPage() {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a' }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a201b' }}>
             Kelola Ujian
           </Typography>
-          <Typography variant="body2" sx={{ color: '#64748b' }}>
+          <Typography variant="body2" sx={{ color: '#78867a' }}>
             Buat dan kelola jadwal ujian sertifikasi.
           </Typography>
         </Box>
@@ -230,7 +230,7 @@ export default function AdminExamsPage() {
       <TableContainer component={Paper} sx={{ borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9' }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: '#f8fafc' }}>
+            <TableRow sx={{ bgcolor: '#faf9f6' }}>
               <TableCell sx={{ fontWeight: 700 }}>Judul</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Waktu Mulai</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Durasi</TableCell>
@@ -248,7 +248,7 @@ export default function AdminExamsPage() {
               </TableRow>
             ) : exams.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} align="center" sx={{ py: 4, color: '#94a3b8' }}>
+                <TableCell colSpan={6} align="center" sx={{ py: 4, color: '#a3aca4' }}>
                   Belum ada ujian.
                 </TableCell>
               </TableRow>
@@ -273,7 +273,7 @@ export default function AdminExamsPage() {
                       size="small"
                       color="success"
                     />
-                    <Typography variant="caption" sx={{ ml: 0.5, color: exam.isActive ? '#10b981' : '#94a3b8' }}>
+                    <Typography variant="caption" sx={{ ml: 0.5, color: exam.isActive ? '#10b981' : '#a3aca4' }}>
                       {exam.isActive ? 'Aktif' : 'Nonaktif'}
                     </Typography>
                   </TableCell>

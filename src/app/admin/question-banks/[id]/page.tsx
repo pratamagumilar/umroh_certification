@@ -247,7 +247,7 @@ export default function QuestionBankDetailPage() {
       <TextField label="Teks Soal" fullWidth multiline rows={4} value={qText} onChange={(e) => setQText(e.target.value)} required sx={{ mb: 2 }} />
 
       {qType === 'PG' && (
-        <Box sx={{ pl: 2, borderLeft: '3px solid #0ea5e9', mb: 2 }}>
+        <Box sx={{ pl: 2, borderLeft: '3px solid #789276', mb: 2 }}>
           <TextField label="Opsi A" fullWidth value={qOptA} onChange={(e) => setQOptA(e.target.value)} required sx={{ mb: 2 }} />
           <TextField label="Opsi B" fullWidth value={qOptB} onChange={(e) => setQOptB(e.target.value)} required sx={{ mb: 2 }} />
           <TextField label="Opsi C" fullWidth value={qOptC} onChange={(e) => setQOptC(e.target.value)} required sx={{ mb: 2 }} />
@@ -283,11 +283,11 @@ export default function QuestionBankDetailPage() {
 
       <Card sx={{ mb: 4, borderRadius: '16px' }}>
         <CardContent sx={{ p: 4 }}>
-          <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#0f172a' }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#1a201b' }}>
             {bank.title}
           </Typography>
           {bank.description && (
-            <Typography variant="body1" sx={{ color: '#64748b', mb: 3 }}>
+            <Typography variant="body1" sx={{ color: '#78867a', mb: 3 }}>
               {bank.description}
             </Typography>
           )}
@@ -300,7 +300,7 @@ export default function QuestionBankDetailPage() {
       {success && <Alert severity="success" sx={{ mb: 2, borderRadius: 2 }}>{success}</Alert>}
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, mt: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b' }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: '#2c352d' }}>
           Daftar Soal
         </Typography>
         <Box sx={{ display: 'flex', gap: 1 }}>
@@ -314,7 +314,7 @@ export default function QuestionBankDetailPage() {
       </Box>
 
       {bank.questions.length === 0 ? (
-        <Paper sx={{ p: 4, textAlign: 'center', borderRadius: '12px', bgcolor: '#f8fafc', color: '#64748b' }}>
+        <Paper sx={{ p: 4, textAlign: 'center', borderRadius: '12px', bgcolor: '#faf9f6', color: '#78867a' }}>
           <Typography>Belum ada soal dalam bank ini.</Typography>
         </Paper>
       ) : (
@@ -325,7 +325,7 @@ export default function QuestionBankDetailPage() {
               try { opts = JSON.parse(q.options); } catch { /* ignore */ }
             }
             return (
-              <Card key={q.id} sx={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: 'none' }}>
+              <Card key={q.id} sx={{ borderRadius: '12px', border: '1px solid #e8e6df', boxShadow: 'none' }}>
                 <CardContent sx={{ position: 'relative', p: 3 }}>
                   <Box sx={{ position: 'absolute', top: 16, right: 16, display: 'flex', gap: 0.5 }}>
                     <IconButton size="small" color="primary" onClick={() => handleEditQuestionOpen(q)}>
@@ -337,10 +337,10 @@ export default function QuestionBankDetailPage() {
                   </Box>
 
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, pr: 8 }}>
-                    <Typography sx={{ fontWeight: 700, color: '#0ea5e9' }}>{index + 1}.</Typography>
+                    <Typography sx={{ fontWeight: 700, color: '#789276' }}>{index + 1}.</Typography>
                     <Box sx={{ flex: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                        <Chip label={q.type === 'PG' ? 'Pilihan Ganda' : 'Esai'} size="small" sx={{ bgcolor: q.type === 'PG' ? '#e0f2fe' : '#fef3c7', color: q.type === 'PG' ? '#0369a1' : '#b45309', fontWeight: 600 }} />
+                        <Chip label={q.type === 'PG' ? 'Pilihan Ganda' : 'Esai'} size="small" sx={{ bgcolor: q.type === 'PG' ? '#e9eee8' : '#fef3c7', color: q.type === 'PG' ? '#596d58' : '#b45309', fontWeight: 600 }} />
                       </Box>
                       <Typography sx={{ whiteSpace: 'pre-wrap', mb: 2 }}>{q.text}</Typography>
                       {q.type === 'PG' && opts && (
@@ -348,9 +348,9 @@ export default function QuestionBankDetailPage() {
                           {['A', 'B', 'C', 'D'].map((optKey) => {
                             const isCorrect = q.correctAnswer === optKey;
                             return (
-                              <Paper key={optKey} sx={{ p: 1.5, display: 'flex', gap: 2, alignItems: 'center', bgcolor: isCorrect ? '#ecfdf5' : '#f8fafc', border: `1px solid ${isCorrect ? '#10b981' : '#e2e8f0'}`, borderRadius: '8px' }}>
-                                <Typography sx={{ fontWeight: 700, color: isCorrect ? '#047857' : '#64748b' }}>{optKey}</Typography>
-                                <Typography sx={{ color: isCorrect ? '#047857' : '#334155' }}>{opts[optKey]}</Typography>
+                              <Paper key={optKey} sx={{ p: 1.5, display: 'flex', gap: 2, alignItems: 'center', bgcolor: isCorrect ? '#ecfdf5' : '#faf9f6', border: `1px solid ${isCorrect ? '#10b981' : '#e8e6df'}`, borderRadius: '8px' }}>
+                                <Typography sx={{ fontWeight: 700, color: isCorrect ? '#047857' : '#78867a' }}>{optKey}</Typography>
+                                <Typography sx={{ color: isCorrect ? '#047857' : '#425045' }}>{opts[optKey]}</Typography>
                                 {isCorrect && <Chip label="Kunci" size="small" color="success" sx={{ ml: 'auto', height: 20 }} />}
                               </Paper>
                             );
@@ -371,7 +371,7 @@ export default function QuestionBankDetailPage() {
         <DialogTitle sx={{ fontWeight: 700 }}>Import Bank Soal dari Excel</DialogTitle>
         <DialogContent sx={{ pt: '16px !important' }}>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Typography variant="body2" sx={{ mb: 2, color: '#64748b' }}>
+          <Typography variant="body2" sx={{ mb: 2, color: '#78867a' }}>
             Pastikan file Excel (.xlsx) memiliki kolom: <strong>Tipe, Soal, Opsi A, Opsi B, Opsi C, Opsi D, Jawaban</strong>.
           </Typography>
           <Button variant="outlined" component="label" fullWidth sx={{ py: 3, borderStyle: 'dashed' }} startIcon={<UploadFileIcon />}>

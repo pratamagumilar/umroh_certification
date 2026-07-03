@@ -29,8 +29,8 @@ export default async function AdminDashboard() {
       label: "Total Peserta",
       value: stats.totalPeserta,
       icon: <PeopleIcon sx={{ fontSize: 36 }} />,
-      color: "#0ea5e9",
-      bgColor: "#f0f9ff",
+      color: "#789276",
+      bgColor: "#f4f6f4",
     },
     {
       label: "Total Pengawas",
@@ -57,10 +57,10 @@ export default async function AdminDashboard() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, color: "#0f172a" }}>
+      <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, color: "#1a201b" }}>
         Dashboard
       </Typography>
-      <Typography variant="body2" sx={{ color: "#64748b", mb: 4 }}>
+      <Typography variant="body2" sx={{ color: "#78867a", mb: 4 }}>
         Selamat datang di Panel Admin Portal Sertifikasi Umroh.
       </Typography>
 
@@ -82,10 +82,10 @@ export default async function AdminDashboard() {
               <CardContent sx={{ p: 3 }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <Box>
-                    <Typography variant="body2" sx={{ color: "#64748b", fontWeight: 500, mb: 1 }}>
+                    <Typography variant="body2" sx={{ color: "#78867a", fontWeight: 500, mb: 1 }}>
                       {card.label}
                     </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: "#0f172a" }}>
+                    <Typography variant="h4" sx={{ fontWeight: 800, color: "#1a201b" }}>
                       {card.value}
                     </Typography>
                   </Box>
