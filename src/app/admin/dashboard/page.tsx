@@ -4,10 +4,10 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
-import PeopleIcon from "@mui/icons-material/People";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import QuizIcon from "@mui/icons-material/Quiz";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
+import SupervisorAccountRoundedIcon from "@mui/icons-material/SupervisorAccountRounded";
+import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 async function getStats() {
   const [totalPeserta, totalPengawas, totalExams, activeExams] =
@@ -28,81 +28,104 @@ export default async function AdminDashboard() {
     {
       label: "Total Peserta",
       value: stats.totalPeserta,
-      icon: <PeopleIcon sx={{ fontSize: 36 }} />,
-      color: "#789276",
-      bgColor: "#f4f6f4",
+      icon: <PeopleRoundedIcon sx={{ fontSize: 32 }} />,
+      color: "#059669",
+      bgColor: "rgba(5, 150, 105, 0.1)",
     },
     {
       label: "Total Pengawas",
       value: stats.totalPengawas,
-      icon: <SupervisorAccountIcon sx={{ fontSize: 36 }} />,
+      icon: <SupervisorAccountRoundedIcon sx={{ fontSize: 32 }} />,
       color: "#8b5cf6",
-      bgColor: "#f5f3ff",
+      bgColor: "rgba(139, 92, 246, 0.1)",
     },
     {
       label: "Total Ujian",
       value: stats.totalExams,
-      icon: <QuizIcon sx={{ fontSize: 36 }} />,
+      icon: <QuizRoundedIcon sx={{ fontSize: 32 }} />,
       color: "#f59e0b",
-      bgColor: "#fffbeb",
+      bgColor: "rgba(245, 158, 11, 0.1)",
     },
     {
       label: "Ujian Aktif",
       value: stats.activeExams,
-      icon: <CheckCircleIcon sx={{ fontSize: 36 }} />,
-      color: "#10b981",
-      bgColor: "#ecfdf5",
+      icon: <CheckCircleRoundedIcon sx={{ fontSize: 32 }} />,
+      color: "#0ea5e9",
+      bgColor: "rgba(14, 165, 233, 0.1)",
     },
   ];
 
   return (
-    <Box>
-      <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, color: "#1a201b" }}>
-        Dashboard
-      </Typography>
-      <Typography variant="body2" sx={{ color: "#78867a", mb: 4 }}>
-        Selamat datang di Panel Admin Portal Sertifikasi Umroh.
-      </Typography>
+    <Box sx={{ pb: 6 }}>
+      {/* Premium Welcome Banner */}
+      <Box sx={{ 
+        background: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)',
+        borderRadius: '24px',
+        p: { xs: 3, md: 5 },
+        color: 'white',
+        mb: 5,
+        position: 'relative',
+        overflow: 'hidden',
+        boxShadow: '0 20px 25px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(15, 23, 42, 0.1)'
+      }}>
+        {/* Abstract shapes for premium feel */}
+        <Box sx={{
+          position: 'absolute', top: -50, right: -20, width: 250, height: 250,
+          borderRadius: '50%', background: 'rgba(255,255,255,0.05)', filter: 'blur(30px)'
+        }} />
+        <Box sx={{
+          position: 'absolute', bottom: -50, right: 150, width: 150, height: 150,
+          borderRadius: '50%', background: 'rgba(255,255,255,0.05)', filter: 'blur(20px)'
+        }} />
 
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.02em' }}>
+            Dashboard Admin
+          </Typography>
+          <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: '600px', fontSize: '1.1rem' }}>
+            Selamat datang di Panel Admin Sertifikasi Umroh. Pantau aktivitas pengguna, ujian, dan kelola master data sistem di sini.
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Metric Cards */}
       <Grid container spacing={3}>
         {statCards.map((card) => (
-          <Grid key={card.label} size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid key={card.label} size={{ xs: 12, sm: 6, lg: 3 }}>
             <Card
               sx={{
-                borderRadius: '12px',
-                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                borderRadius: '20px',
+                boxShadow: "0 10px 15px -3px rgba(0,0,0,0.02), 0 4px 6px -4px rgba(0,0,0,0.02)",
                 border: "1px solid #f1f5f9",
-                transition: "transform 0.15s, box-shadow 0.15s",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                 "&:hover": {
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 20px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02)",
                 },
               }}
             >
-              <CardContent sx={{ p: 3 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <Box>
-                    <Typography variant="body2" sx={{ color: "#78867a", fontWeight: 500, mb: 1 }}>
-                      {card.label}
-                    </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: "#1a201b" }}>
-                      {card.value}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      width: 52,
-                      height: 52,
-                      borderRadius: "14px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      bgcolor: card.bgColor,
-                      color: card.color,
-                    }}
-                  >
-                    {card.icon}
-                  </Box>
+              <CardContent sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: card.bgColor,
+                    color: card.color,
+                  }}
+                >
+                  {card.icon}
+                </Box>
+                <Box>
+                  <Typography variant="h3" sx={{ fontWeight: 800, color: "text.primary", lineHeight: 1 }}>
+                    {card.value}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600, mt: 0.5 }}>
+                    {card.label}
+                  </Typography>
                 </Box>
               </CardContent>
             </Card>

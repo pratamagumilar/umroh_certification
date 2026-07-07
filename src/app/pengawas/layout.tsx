@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import PengawasSidebar, { DRAWER_WIDTH } from "@/components/PengawasSidebar";
-import AdminHeader from "@/components/AdminHeader"; // Reusing AdminHeader for topbar
 import Box from "@mui/material/Box";
 
 export default async function PengawasLayout({
@@ -28,8 +27,7 @@ export default async function PengawasLayout({
           flexDirection: "column",
         }}
       >
-        <AdminHeader userName={session.user.name || "Pengawas"} />
-        <Box sx={{ p: 3, flexGrow: 1 }}>{children}</Box>
+        <Box sx={{ p: 4, flexGrow: 1 }}>{children}</Box>
       </Box>
     </Box>
   );

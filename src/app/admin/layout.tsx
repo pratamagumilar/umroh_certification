@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import AdminSidebar, { DRAWER_WIDTH } from "@/components/AdminSidebar";
-import AdminHeader from "@/components/AdminHeader";
 import Box from "@mui/material/Box";
 
 export default async function AdminLayout({
@@ -28,8 +27,7 @@ export default async function AdminLayout({
           flexDirection: "column",
         }}
       >
-        <AdminHeader userName={session.user.name || "Admin"} />
-        <Box sx={{ p: 3, flexGrow: 1 }}>{children}</Box>
+        <Box sx={{ p: 4, flexGrow: 1 }}>{children}</Box>
       </Box>
     </Box>
   );

@@ -60,7 +60,7 @@ function SortableSessionItem({ session, onToggleLock, onEdit, onDelete }: any) {
         </Box>
         <Box sx={{ flex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-            <Typography sx={{ fontWeight: 700, color: '#596d58' }}>{session.material.title}</Typography>
+            <Typography sx={{ fontWeight: 700, color: '#596d58' }}>{session.material?.title || 'Materi Dihapus'}</Typography>
             {session.isLocked ? (
               <Chip icon={<LockIcon fontSize="small" />} label="Terkunci" size="small" color="error" variant="outlined" />
             ) : (
@@ -68,9 +68,9 @@ function SortableSessionItem({ session, onToggleLock, onEdit, onDelete }: any) {
             )}
           </Box>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-            {session.material.description || 'Tidak ada deskripsi.'}
+            {session.material?.description || 'Tidak ada deskripsi.'}
           </Typography>
-          {session.material.pdfUrl && (
+          {session.material?.pdfUrl && (
             <Button
               component="a"
               href={getFileUrl(session.material.pdfUrl)}
@@ -909,7 +909,7 @@ export default function AdminCourseDetailPage() {
                     session.assignments.flatMap(assignment => 
                       assignment.submissions.map(sub => ({
                         ...sub,
-                        sessionTitle: session.material.title,
+                        sessionTitle: session.material?.title || session.masterAssignment?.title || 'Sesi Tanpa Judul',
                         assignmentTitle: assignment.title,
                         assignmentId: assignment.id,
                         maxScore: assignment.maxScore

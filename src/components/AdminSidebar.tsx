@@ -15,26 +15,30 @@ import {
   Box,
   Divider,
   Collapse,
+  Avatar,
+  IconButton
 } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PeopleIcon from '@mui/icons-material/People';
-import QuizIcon from '@mui/icons-material/Quiz';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import CardMembershipIcon from '@mui/icons-material/CardMembership';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import ClassIcon from '@mui/icons-material/Class';
+import { useSession, signOut } from 'next-auth/react';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import QuizRoundedIcon from '@mui/icons-material/QuizRounded';
+import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
+import CardMembershipRoundedIcon from '@mui/icons-material/CardMembershipRounded';
+import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
+import ClassRoundedIcon from '@mui/icons-material/ClassRounded';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+import BookRoundedIcon from '@mui/icons-material/BookRounded';
 
-import BookIcon from '@mui/icons-material/Book';
-
-const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH = 280;
 
 const menuItems = [
-  { label: 'Dashboard', href: '/admin/dashboard', icon: <DashboardIcon /> },
+  { label: 'Dashboard', href: '/admin/dashboard', icon: <DashboardRoundedIcon /> },
   {
     label: 'Kelola User',
-    icon: <PeopleIcon />,
+    icon: <PeopleRoundedIcon />,
     basePath: '/admin/users',
     subItems: [
       { label: 'Admin', href: '/admin/users?role=ADMIN' },
@@ -43,18 +47,19 @@ const menuItems = [
       { label: 'Peserta', href: '/admin/users?role=PESERTA' },
     ],
   },
-  { label: 'Course', href: '/admin/courses', icon: <ClassIcon /> },
-  { label: 'Master Materi', href: '/admin/materials', icon: <BookIcon /> },
-  { label: 'Kelola Ujian', href: '/admin/exams', icon: <QuizIcon /> },
-  { label: 'Bank Soal', href: '/admin/question-banks', icon: <LibraryBooksIcon /> },
-  { label: 'Monitoring Hasil', href: '/admin/results', icon: <AssessmentIcon /> },
-  { label: 'Kelola Sertifikat', href: '/admin/certificates', icon: <CardMembershipIcon /> },
+  { label: 'Course', href: '/admin/courses', icon: <ClassRoundedIcon /> },
+  { label: 'Master Materi', href: '/admin/materials', icon: <BookRoundedIcon /> },
+  { label: 'Kelola Ujian', href: '/admin/exams', icon: <QuizRoundedIcon /> },
+  { label: 'Bank Soal', href: '/admin/question-banks', icon: <LibraryBooksRoundedIcon /> },
+  { label: 'Monitoring Hasil', href: '/admin/results', icon: <AssessmentRoundedIcon /> },
+  { label: 'Kelola Sertifikat', href: '/admin/certificates', icon: <CardMembershipRoundedIcon /> },
 ];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentRole = searchParams.get('role');
+  const { data: session } = useSession();
 
   const [openUsers, setOpenUsers] = useState(true);
 
@@ -71,26 +76,35 @@ export default function AdminSidebar() {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
-          backgroundColor: '#ffffff', // Bright background
-          color: '#425045', // Dark Sage gray text
-          borderRight: '1px solid #e8e6df', // Subtle border
+          backgroundColor: '#ffffff',
+          color: 'text.primary',
+          borderRight: '1px solid',
+          borderColor: 'divider',
+          boxShadow: '4px 0 24px rgba(0,0,0,0.02)',
         },
       }}
     >
-      <Toolbar sx={{ px: 3, py: 2.5 }}>
+      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ 
+          width: 40, height: 40, borderRadius: '12px', 
+          bgcolor: 'primary.main', color: 'white', 
+          display: 'flex', alignItems: 'center', justifyContent: 'center' 
+        }}>
+          <SchoolRoundedIcon />
+        </Box>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a201b', letterSpacing: '-0.02em' }}>
-            ☪ Sertifikasi
+          <Typography variant="h6" sx={{ fontWeight: 800, color: 'text.primary', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+            Umroh Cert
           </Typography>
-          <Typography variant="caption" sx={{ color: '#78867a', fontSize: '0.75rem', fontWeight: 600 }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
             Panel Admin
           </Typography>
         </Box>
-      </Toolbar>
+      </Box>
 
-      <Divider sx={{ borderColor: '#e8e6df', mb: 2 }} />
+      <Divider sx={{ borderColor: 'divider', mb: 2, mx: 2 }} />
 
-      <List sx={{ px: 1.5 }}>
+      <List sx={{ px: 2, flexGrow: 1 }}>
         {menuItems.map((item) => {
           if (item.subItems) {
             const isBaseActive = pathname === item.basePath || pathname.startsWith(item.basePath + '/');
@@ -103,13 +117,13 @@ export default function AdminSidebar() {
                       borderRadius: '12px',
                       py: 1.2,
                       px: 2,
-                      backgroundColor: isBaseActive ? 'rgba(120, 146, 118, 0.1)' : 'transparent',
-                      color: isBaseActive ? '#596d58' : '#5c6b5e',
+                      backgroundColor: isBaseActive ? 'rgba(5, 150, 105, 0.08)' : 'transparent',
+                      color: isBaseActive ? 'primary.main' : 'text.secondary',
                       '&:hover': {
-                        backgroundColor: 'rgba(120, 146, 118, 0.08)',
-                        color: '#2c352d',
+                        backgroundColor: isBaseActive ? 'rgba(5, 150, 105, 0.12)' : 'rgba(15, 23, 42, 0.04)',
+                        color: isBaseActive ? 'primary.main' : 'text.primary',
                       },
-                      transition: 'all 0.15s ease',
+                      transition: 'all 0.2s',
                     }}
                   >
                     <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>{item.icon}</ListItemIcon>
@@ -147,14 +161,13 @@ export default function AdminSidebar() {
                             py: 1,
                             pl: 7,
                             mb: 0.5,
-                            backgroundColor: isActive ? 'rgba(120, 146, 118, 0.15)' : 'transparent',
-                            color: isActive ? '#596d58' : '#78867a',
+                            backgroundColor: isActive ? 'rgba(5, 150, 105, 0.08)' : 'transparent',
+                            color: isActive ? 'primary.main' : 'text.secondary',
                             '&:hover': {
-                              backgroundColor: isActive
-                                ? 'rgba(120, 146, 118, 0.2)'
-                                : 'rgba(120, 146, 118, 0.08)',
-                              color: '#2c352d',
+                              backgroundColor: isActive ? 'rgba(5, 150, 105, 0.12)' : 'rgba(15, 23, 42, 0.04)',
+                              color: isActive ? 'primary.main' : 'text.primary',
                             },
+                            transition: 'all 0.2s',
                           }}
                         >
                           <ListItemText
@@ -187,15 +200,13 @@ export default function AdminSidebar() {
                   borderRadius: '12px',
                   py: 1.2,
                   px: 2,
-                  backgroundColor: isActive ? 'rgba(120, 146, 118, 0.15)' : 'transparent',
-                  color: isActive ? '#596d58' : '#5c6b5e',
+                  backgroundColor: isActive ? 'rgba(5, 150, 105, 0.08)' : 'transparent',
+                  color: isActive ? 'primary.main' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: isActive
-                      ? 'rgba(120, 146, 118, 0.2)'
-                      : 'rgba(120, 146, 118, 0.08)',
-                    color: '#2c352d',
+                    backgroundColor: isActive ? 'rgba(5, 150, 105, 0.12)' : 'rgba(15, 23, 42, 0.04)',
+                    color: isActive ? 'primary.main' : 'text.primary',
                   },
-                  transition: 'all 0.15s ease',
+                  transition: 'all 0.2s',
                 }}
               >
                 <ListItemIcon
@@ -222,6 +233,29 @@ export default function AdminSidebar() {
           );
         })}
       </List>
+
+      <Box sx={{ p: 2 }}>
+        <Box sx={{ 
+          p: 2, borderRadius: '16px', bgcolor: 'background.default', 
+          display: 'flex', alignItems: 'center', gap: 1.5,
+          border: '1px solid', borderColor: 'divider'
+        }}>
+           <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: '0.875rem', fontWeight: 700 }}>
+              {session?.user?.name?.charAt(0).toUpperCase() || 'A'}
+            </Avatar>
+            <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                {session?.user?.name || 'Admin'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', display: 'block' }}>
+                Admin
+              </Typography>
+            </Box>
+            <IconButton size="small" onClick={() => signOut({ callbackUrl: '/login' })} color="error">
+              <LogoutRoundedIcon fontSize="small" />
+            </IconButton>
+        </Box>
+      </Box>
     </Drawer>
   );
 }

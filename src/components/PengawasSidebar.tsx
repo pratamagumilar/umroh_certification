@@ -10,27 +10,32 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar,
   Typography,
   Box,
   Divider,
+  Avatar,
+  IconButton
 } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import GradingIcon from '@mui/icons-material/Grading';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import { useSession, signOut } from 'next-auth/react';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
+import GradingRoundedIcon from '@mui/icons-material/GradingRounded';
+import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 
-const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH = 280;
 
 const menuItems = [
-  { label: 'Dashboard', href: '/pengawas/dashboard', icon: <DashboardIcon /> },
-  { label: 'Pengawasan Ujian', href: '/pengawas/exams', icon: <VisibilityIcon /> },
-  { label: 'Penilaian Esai', href: '/pengawas/grading', icon: <GradingIcon /> },
-  { label: 'Penilaian Materi', href: '/pengawas/material-grading', icon: <AutoStoriesIcon /> },
+  { label: 'Dashboard', href: '/pengawas/dashboard', icon: <DashboardRoundedIcon /> },
+  { label: 'Pengawasan Ujian', href: '/pengawas/exams', icon: <VisibilityRoundedIcon /> },
+  { label: 'Penilaian Esai', href: '/pengawas/grading', icon: <GradingRoundedIcon /> },
+  { label: 'Penilaian Materi', href: '/pengawas/material-grading', icon: <AutoStoriesRoundedIcon /> },
 ];
 
 export default function PengawasSidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
     <Drawer
@@ -41,26 +46,35 @@ export default function PengawasSidebar() {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
-          backgroundColor: '#ffffff', // Bright background
-          color: '#425045', // Dark Sage gray text
-          borderRight: '1px solid #e8e6df', // Subtle border
+          backgroundColor: '#ffffff',
+          color: 'text.primary',
+          borderRight: '1px solid',
+          borderColor: 'divider',
+          boxShadow: '4px 0 24px rgba(0,0,0,0.02)',
         },
       }}
     >
-      <Toolbar sx={{ px: 3, py: 2.5 }}>
+      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ 
+          width: 40, height: 40, borderRadius: '12px', 
+          bgcolor: 'primary.main', color: 'white', 
+          display: 'flex', alignItems: 'center', justifyContent: 'center' 
+        }}>
+          <SchoolRoundedIcon />
+        </Box>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a201b', letterSpacing: '-0.02em' }}>
-            ☪ Sertifikasi
+          <Typography variant="h6" sx={{ fontWeight: 800, color: 'text.primary', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+            Umroh Cert
           </Typography>
-          <Typography variant="caption" sx={{ color: '#78867a', fontSize: '0.75rem', fontWeight: 600 }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
             Panel Pengawas
           </Typography>
         </Box>
-      </Toolbar>
+      </Box>
 
-      <Divider sx={{ borderColor: '#e8e6df', mb: 2 }} />
+      <Divider sx={{ borderColor: 'divider', mb: 2, mx: 2 }} />
 
-      <List sx={{ px: 1.5 }}>
+      <List sx={{ px: 2, flexGrow: 1 }}>
         {menuItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
@@ -72,15 +86,13 @@ export default function PengawasSidebar() {
                   borderRadius: '12px',
                   py: 1.2,
                   px: 2,
-                  backgroundColor: isActive ? 'rgba(120, 146, 118, 0.15)' : 'transparent',
-                  color: isActive ? '#596d58' : '#5c6b5e',
+                  backgroundColor: isActive ? 'rgba(5, 150, 105, 0.08)' : 'transparent',
+                  color: isActive ? 'primary.main' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: isActive
-                      ? 'rgba(120, 146, 118, 0.2)'
-                      : 'rgba(120, 146, 118, 0.08)',
-                    color: '#2c352d',
+                    backgroundColor: isActive ? 'rgba(5, 150, 105, 0.12)' : 'rgba(15, 23, 42, 0.04)',
+                    color: isActive ? 'primary.main' : 'text.primary',
                   },
-                  transition: 'all 0.15s ease',
+                  transition: 'all 0.2s',
                 }}
               >
                 <ListItemIcon
@@ -107,6 +119,29 @@ export default function PengawasSidebar() {
           );
         })}
       </List>
+
+      <Box sx={{ p: 2 }}>
+        <Box sx={{ 
+          p: 2, borderRadius: '16px', bgcolor: 'background.default', 
+          display: 'flex', alignItems: 'center', gap: 1.5,
+          border: '1px solid', borderColor: 'divider'
+        }}>
+           <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: '0.875rem', fontWeight: 700 }}>
+              {session?.user?.name?.charAt(0).toUpperCase() || 'P'}
+            </Avatar>
+            <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                {session?.user?.name || 'Pengawas'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', display: 'block' }}>
+                Pengawas
+              </Typography>
+            </Box>
+            <IconButton size="small" onClick={() => signOut({ callbackUrl: '/login' })} color="error">
+              <LogoutRoundedIcon fontSize="small" />
+            </IconButton>
+        </Box>
+      </Box>
     </Drawer>
   );
 }

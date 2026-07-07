@@ -143,7 +143,7 @@ export default function PengawasMaterialGradingPage() {
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ fontWeight: 600 }}>{sub.assignment.session.course.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{sub.assignment.session.material.title}</Typography>
+                    <Typography variant="body2" color="text.secondary">{sub.assignment.session.material?.title || sub.assignment.session.masterAssignment?.title || 'Sesi Tanpa Judul'}</Typography>
                   </TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>{sub.assignment.title}</TableCell>
                   <TableCell>

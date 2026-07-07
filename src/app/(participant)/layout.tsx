@@ -1,20 +1,28 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemText, ListItemIcon, Avatar, Menu, MenuItem } from '@mui/material';
+import { 
+  AppBar, Toolbar, Typography, Box, IconButton, Drawer, 
+  List, ListItem, ListItemText, ListItemIcon, Avatar, Menu, MenuItem, 
+  useTheme, useMediaQuery, Divider, Tooltip
+} from '@mui/material';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import QuizIcon from '@mui/icons-material/Quiz';
-import PersonIcon from '@mui/icons-material/Person';
-import MenuIcon from '@mui/icons-material/Menu';
-import LogoutIcon from '@mui/icons-material/Logout';
-import SchoolIcon from '@mui/icons-material/School';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import QuizRoundedIcon from '@mui/icons-material/QuizRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+
+const drawerWidth = 280;
 
 export default function ParticipantLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,144 +40,199 @@ export default function ParticipantLayout({ children }: { children: React.ReactN
   };
 
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Materi Pembelajaran', icon: <SchoolIcon />, path: '/courses' },
-    { text: 'Ujian Saya', icon: <QuizIcon />, path: '/exams' },
-    { text: 'Profil', icon: <PersonIcon />, path: '/profile' },
+    { text: 'Dashboard', icon: <DashboardRoundedIcon />, path: '/dashboard' },
+    { text: 'Materi Kelas', icon: <SchoolRoundedIcon />, path: '/courses' },
+    { text: 'Ujian Saya', icon: <QuizRoundedIcon />, path: '/exams' },
+    { text: 'Profil', icon: <PersonRoundedIcon />, path: '/profile' },
   ];
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2, fontWeight: 'bold', color: '#2c352d' }}>
-        Sertifikasi Umroh
-      </Typography>
-      <List>
-        {menuItems.map((item) => (
-          <ListItem 
-            key={item.text} 
-            onClick={() => router.push(item.path)}
-            sx={{ 
-              bgcolor: pathname === item.path ? '#e9eee8' : 'transparent',
-              borderRadius: '8px',
-              mx: 1,
-              mb: 1,
-              width: 'auto',
-              cursor: 'pointer',
-              '&:hover': { bgcolor: '#f1f5f9' }
-            }}
-          >
-            <ListItemIcon sx={{ color: pathname === item.path ? '#789276' : '#78867a' }}>
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText 
-              primary={item.text} 
-              sx={{ color: pathname === item.path ? '#789276' : '#78867a', '& .MuiTypography-root': { fontWeight: pathname === item.path ? 700 : 500 } }} 
-            />
-          </ListItem>
-        ))}
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#ffffff' }}>
+      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ 
+          width: 40, height: 40, borderRadius: '12px', 
+          bgcolor: 'primary.main', color: 'white', 
+          display: 'flex', alignItems: 'center', justifyContent: 'center' 
+        }}>
+          <SchoolRoundedIcon />
+        </Box>
+        <Typography variant="h6" sx={{ fontWeight: 800, color: 'text.primary', letterSpacing: '-0.02em' }}>
+          Umroh Cert
+        </Typography>
+      </Box>
+      <Divider sx={{ mb: 2, mx: 2, borderColor: 'divider' }} />
+      <List sx={{ px: 2, flexGrow: 1 }}>
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+          return (
+            <ListItem 
+              key={item.text} 
+              onClick={() => {
+                router.push(item.path);
+                if (isMobile) setMobileOpen(false);
+              }}
+              sx={{ 
+                bgcolor: isActive ? 'rgba(5, 150, 105, 0.08)' : 'transparent',
+                borderRadius: '12px',
+                mb: 1,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                '&:hover': { bgcolor: isActive ? 'rgba(5, 150, 105, 0.12)' : 'rgba(15, 23, 42, 0.04)' }
+              }}
+            >
+              <ListItemIcon sx={{ 
+                color: isActive ? 'primary.main' : 'text.secondary',
+                minWidth: 40
+              }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={item.text} 
+                sx={{ 
+                  color: isActive ? 'primary.main' : 'text.primary', 
+                  '& .MuiTypography-root': { fontWeight: isActive ? 700 : 500 } 
+                }} 
+              />
+            </ListItem>
+          );
+        })}
       </List>
+      
+      {/* Bottom Profile Area in Sidebar */}
+      <Box sx={{ p: 2 }}>
+        <Box sx={{ 
+          p: 2, borderRadius: '16px', bgcolor: 'background.default', 
+          display: 'flex', alignItems: 'center', gap: 2,
+          border: '1px solid', borderColor: 'divider'
+        }}>
+           <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: '0.875rem' }}>
+              {session?.user?.name?.charAt(0).toUpperCase() || 'U'}
+            </Avatar>
+            <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                {session?.user?.name || 'User'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', display: 'block' }}>
+                Peserta
+              </Typography>
+            </Box>
+        </Box>
+      </Box>
     </Box>
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#faf9f6' }}>
-      <AppBar position="sticky" sx={{ bgcolor: '#ffffff', color: '#2c352d', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 800, color: '#789276' }}>
-            Sertifikasi Umroh
-          </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {menuItems.map((item) => (
-              <Button 
-                key={item.text} 
-                onClick={() => router.push(item.path)}
-                sx={{ 
-                  color: pathname === item.path ? '#789276' : '#78867a', 
-                  fontWeight: pathname === item.path ? 700 : 500,
-                  mx: 1,
-                  textTransform: 'none',
-                  fontSize: '1rem'
-                }}
-              >
-                {item.text}
-              </Button>
-            ))}
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+      
+      {/* App Bar (Header) */}
+      <AppBar 
+        position="fixed" 
+        sx={{ 
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          ml: { md: `${drawerWidth}px` },
+          bgcolor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(16px)',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          boxShadow: 'none',
+          color: 'text.primary'
+        }}
+      >
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { md: 'none' } }}
+            >
+              <MenuRoundedIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ fontWeight: 700, display: { xs: 'none', sm: 'block' } }}>
+              {menuItems.find(item => pathname === item.path || pathname.startsWith(item.path + '/'))?.text || 'Portal'}
+            </Typography>
           </Box>
-          {session?.user && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <Avatar sx={{ width: 32, height: 32, bgcolor: '#789276', fontSize: '0.875rem' }}>
-                  {session.user.name?.charAt(0).toUpperCase()}
-                </Avatar>
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                slotProps={{
-                  paper: { sx: { mt: 1.5, borderRadius: '12px', minWidth: 200, boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)' } }
-                }}
-              >
-                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #f1f5f9' }}>
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>{session.user.name}</Typography>
-                  <Typography variant="body2" sx={{ color: '#78867a' }}>{session.user.email}</Typography>
-                </Box>
-                <MenuItem onClick={() => { handleClose(); router.push('/profile'); }} sx={{ py: 1.5 }}>
-                  <ListItemIcon><PersonIcon fontSize="small" /></ListItemIcon>
-                  Profil Saya
-                </MenuItem>
-                <MenuItem onClick={() => signOut({ callbackUrl: '/login' })} sx={{ py: 1.5, color: '#ef4444' }}>
-                  <ListItemIcon><LogoutIcon fontSize="small" sx={{ color: '#ef4444' }} /></ListItemIcon>
-                  Keluar
-                </MenuItem>
-              </Menu>
-            </div>
-          )}
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {session?.user && (
+              <>
+                <Tooltip title="Akun Anda">
+                  <IconButton onClick={handleMenu} size="small" sx={{ ml: 2 }}>
+                    <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontWeight: 600 }}>
+                      {session.user.name?.charAt(0).toUpperCase()}
+                    </Avatar>
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  slotProps={{
+                    paper: { sx: { mt: 1.5, borderRadius: '16px', minWidth: 220, boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' } }
+                  }}
+                >
+                  <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>{session.user.name}</Typography>
+                    <Typography variant="body2" color="text.secondary" noWrap>{session.user.email}</Typography>
+                  </Box>
+                  <MenuItem onClick={() => { handleClose(); router.push('/profile'); }} sx={{ py: 1.5, mt: 1 }}>
+                    <ListItemIcon><PersonRoundedIcon fontSize="small" /></ListItemIcon>
+                    Profil Saya
+                  </MenuItem>
+                  <MenuItem onClick={() => signOut({ callbackUrl: '/login' })} sx={{ py: 1.5, color: 'error.main' }}>
+                    <ListItemIcon><LogoutRoundedIcon fontSize="small" color="error" /></ListItemIcon>
+                    Keluar
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
-      <Box component="nav">
+
+      {/* Sidebar Navigation */}
+      <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
+        {/* Mobile drawer */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+          ModalProps={{ keepMounted: true }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240, borderRight: 'none', boxShadow: '4px 0 10px rgba(0,0,0,0.05)' },
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
           {drawer}
         </Drawer>
+        {/* Desktop drawer */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: '1px solid', borderColor: 'divider' },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
       </Box>
-      <Box component="main" sx={{ p: { xs: 2, sm: 3, md: 4 }, flexGrow: 1, maxWidth: 1200, mx: 'auto', width: '100%' }}>
+
+      {/* Main Content Area */}
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1, 
+          p: { xs: 2, sm: 3, md: 4 }, 
+          width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
+          mt: '64px', // Space for AppBar
+          maxWidth: 1400,
+          mx: 'auto'
+        }}
+      >
         {children}
       </Box>
     </Box>
