@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       const phone = String(row[4] || '').trim();
 
       // Fallback validasi role
-      if (!['PESERTA', 'PENGAWAS', 'ADMIN'].includes(role)) {
+      if (!['PESERTA', 'PENGAWAS', 'ADMIN', 'PANITIA'].includes(role)) {
         role = 'PESERTA';
       }
 

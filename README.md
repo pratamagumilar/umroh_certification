@@ -58,6 +58,14 @@ Aplikasi ini memiliki **3 role** dengan hak akses yang berbeda. Setiap akun hany
 
 Pengembangan dilakukan bertahap per POV. Prioritas: **Admin → Peserta → Pengawas**.
 
+### MVP 2: Learning Course
+
+Rencana MVP 2 dipisahkan ke dokumen khusus agar bisa dipakai sebagai checklist implementasi:
+
+- [docs/MVP2_LEARNING_COURSE_PLAN.md](docs/MVP2_LEARNING_COURSE_PLAN.md)
+
+Fokus MVP 2 adalah modul pembelajaran hybrid: `Course -> Materi PDF -> Tugas Esai -> Penilaian -> Progress -> Moderasi Nilai`.
+
 ---
 
 ### 🔴 FASE 1: Admin (Prioritas Utama)
@@ -156,7 +164,7 @@ Pengembangan dilakukan bertahap per POV. Prioritas: **Admin → Peserta → Peng
 - **1 akun = 1 role.** Tidak ada multi-role per akun.
 - **Bulk import Excel** tersedia untuk data user dan soal ujian.
 - **Kelola Ujian memakai Bank Soal sebagai sumber soal.** Setelah soal dari Bank Soal masuk ke ujian, admin tidak bisa menghapus soal satu per satu dari detail ujian.
-- **Saat ini fokus di FASE 1 (Admin).**
+- **MVP 2 Learning Course** sudah direncanakan di `docs/MVP2_LEARNING_COURSE_PLAN.md`.
 
 ---
 *Terakhir diupdate: 3 Juli 2026*

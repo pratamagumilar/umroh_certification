@@ -6,15 +6,23 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "jiti prisma/seed.ts"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.1.1",
     "@mui/material": "^9.1.1",
     "@mui/material-nextjs": "^9.1.1",
     "@prisma/client": "^5.22.0",
+    "@supabase/supabase-js": "^2.109.0",
     "bcrypt": "^6.0.0",
     "date-fns": "^4.4.0",
     "jspdf": "^4.2.1",
@@ -32,6 +40,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "jiti": "^2.7.0",
     "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "typescript": "^5"

@@ -16,8 +16,13 @@ export default withAuth(
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
+    // Panitia routes — hanya PANITIA
+    if (pathname.startsWith("/panitia") && role !== "PANITIA") {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
     // Peserta routes — hanya PESERTA
-    const pesertaRoutes = ["/dashboard", "/profile", "/exams", "/results", "/certificates"];
+    const pesertaRoutes = ["/dashboard", "/profile", "/exams", "/results", "/certificates", "/courses"];
     const isPesertaRoute = pesertaRoutes.some((route) => pathname.startsWith(route));
     if (isPesertaRoute && role !== "PESERTA") {
       return NextResponse.redirect(new URL("/login", req.url));
@@ -36,10 +41,12 @@ export const config = {
   matcher: [
     "/admin/:path*",
     "/pengawas/:path*",
+    "/panitia/:path*",
     "/dashboard/:path*",
     "/profile/:path*",
     "/exams/:path*",
     "/results/:path*",
     "/certificates/:path*",
+    "/courses/:path*",
   ],
 };

@@ -18,6 +18,7 @@ import {
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import GradingIcon from '@mui/icons-material/Grading';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 const DRAWER_WIDTH = 260;
 
@@ -25,6 +26,7 @@ const menuItems = [
   { label: 'Dashboard', href: '/pengawas/dashboard', icon: <DashboardIcon /> },
   { label: 'Pengawasan Ujian', href: '/pengawas/exams', icon: <VisibilityIcon /> },
   { label: 'Penilaian Esai', href: '/pengawas/grading', icon: <GradingIcon /> },
+  { label: 'Penilaian Materi', href: '/pengawas/material-grading', icon: <AutoStoriesIcon /> },
 ];
 
 export default function PengawasSidebar() {

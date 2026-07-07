@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import fs from 'fs';
 import path from 'path';
 import { jsPDF } from 'jspdf';
+import { uploadFile } from '@/lib/storage';
 
 export async function POST(req: Request) {
   try {
@@ -64,17 +65,10 @@ export async function POST(req: Request) {
 
     const pdfBuffer = doc.output('arraybuffer');
     
-    const publicDir = path.join(process.cwd(), 'public', 'certificates');
-    if (!fs.existsSync(publicDir)) {
-      fs.mkdirSync(publicDir, { recursive: true });
-    }
-
     const fileName = `cert_${userId}_${examId}.pdf`;
-    const filePath = path.join(publicDir, fileName);
     
-    fs.writeFileSync(filePath, Buffer.from(pdfBuffer));
-
-    const pdfUrl = `/certificates/${fileName}`;
+    // Gunakan storage adapter
+    const pdfUrl = await uploadFile(Buffer.from(pdfBuffer), 'certificates', fileName, 'application/pdf');
 
     // Upsert ke database
     const existing = await prisma.certificate.findFirst({

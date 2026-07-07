@@ -25,6 +25,15 @@ model User {
   certificates    Certificate[]
   examAnswers     ExamAnswer[]
   examSupervisors ExamSupervisor[]
+  
+  // MVP 2 Learning Course Relations
+  courseEnrollments     CourseEnrollment[]
+  sessionProgresses     SessionProgress[]
+  assignmentSubmissions AssignmentSubmission[]
+  assignmentGrades      AssignmentGrade[]
+  gradeAdjustments      GradeAdjustment[]
+  createdMaterials      Material[]
+  createdAssignments    MasterAssignment[]
 }
 
 model Exam {
@@ -43,6 +52,9 @@ model Exam {
   certificates Certificate[]
   supervisors  ExamSupervisor[]
   questions    ExamQuestion[]
+  
+  // MVP 2 Learning Course Relations
+  courseExams  CourseExam[]
 }
 
 model ExamSupervisor {
@@ -142,4 +154,148 @@ model Certificate {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// MVP 2: Learning Course Models
+// ============================================
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  isActive    Boolean  @default(true)
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  enrollments CourseEnrollment[]
+  sessions    CourseSession[]
+  courseExams CourseExam[]
+}
+
+model CourseEnrollment {
+  id         String   @id @default(uuid())
+  courseId   String
+  userId     String
+  status     String   @default("ENROLLED") // ENROLLED, COMPLETED, DROPPED
+  enrolledAt DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, userId])
+}
+
+model CourseSession {
+  id                 String   @id @default(uuid())
+  courseId           String
+  materialId         String?
+  masterAssignmentId String?
+  order              Int      @default(0)
+  isActive           Boolean  @default(true)
+  isLocked           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  material         Material?         @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  masterAssignment MasterAssignment? @relation(fields: [masterAssignmentId], references: [id], onDelete: Cascade)
+  
+  progresses  SessionProgress[]
+  submissions AssignmentSubmission[]
+}
+
+model MasterAssignment {
+  id          String   @id @default(uuid())
+  title       String
+  prompt      String
+  maxScore    Float    @default(100)
+  isActive    Boolean  @default(true)
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy      User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  courseSessions CourseSession[]
+}
+
+model Material {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  pdfUrl      String
+  isActive    Boolean  @default(true)
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy      User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  courseSessions CourseSession[]
+}
+
+model SessionProgress {
+  id          String   @id @default(uuid())
+  sessionId   String
+  userId      String
+  status      String   @default("COMPLETED") // COMPLETED
+  completedAt DateTime @default(now())
+
+  session CourseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId])
+}
+
+model AssignmentSubmission {
+  id           String   @id @default(uuid())
+  sessionId    String
+  userId       String
+  answer       String
+  status       String   @default("SUBMITTED") // DRAFT, SUBMITTED, GRADED, REVISION
+  submittedAt  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  session    CourseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grades     AssignmentGrade[]
+
+  @@unique([sessionId, userId])
+}
+
+model AssignmentGrade {
+  id           String   @id @default(uuid())
+  submissionId String
+  graderId     String
+  score        Float
+  feedback     String?
+  gradedAt     DateTime @default(now())
+
+  submission AssignmentSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  grader     User                 @relation(fields: [graderId], references: [id], onDelete: Cascade)
+}
+
+model CourseExam {
+  id         String  @id @default(uuid())
+  courseId   String
+  examId     String
+  isRequired Boolean @default(true)
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, examId])
+}
+
+model GradeAdjustment {
+  id            String   @id @default(uuid())
+  userId        String
+  courseId      String
+  adminId       String
+  originalScore Float
+  adjustedScore Float
+  reason        String
+  createdAt     DateTime @default(now())
+
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -48,3 +48,6 @@ next-env.d.ts
 # SQLite backup files
 prisma/dev.db.backup-before-supabase
 prisma/dev.db.backup-before-export
+
+# Local uploaded files
+storage/

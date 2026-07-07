@@ -9,6 +9,7 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SchoolIcon from '@mui/icons-material/School';
 
 export default function ParticipantLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
@@ -32,6 +33,7 @@ export default function ParticipantLayout({ children }: { children: React.ReactN
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'Materi Pembelajaran', icon: <SchoolIcon />, path: '/courses' },
     { text: 'Ujian Saya', icon: <QuizIcon />, path: '/exams' },
     { text: 'Profil', icon: <PersonIcon />, path: '/profile' },
   ];

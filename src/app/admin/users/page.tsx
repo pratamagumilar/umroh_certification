@@ -22,8 +22,9 @@ interface User {
   createdAt: string;
 }
 
-const roleColors: Record<string, 'primary' | 'secondary' | 'success'> = {
+const roleColors: Record<string, 'primary' | 'secondary' | 'success' | 'warning'> = {
   ADMIN: 'primary',
+  PANITIA: 'warning',
   PENGAWAS: 'secondary',
   PESERTA: 'success',
 };
@@ -82,7 +83,7 @@ function AdminUsersContent() {
     setFormName('');
     setFormEmail('');
     setFormPassword('');
-    if (['ADMIN', 'PENGAWAS', 'PESERTA'].includes(roleParam)) {
+    if (['ADMIN', 'PANITIA', 'PENGAWAS', 'PESERTA'].includes(roleParam)) {
       setFormRole(roleParam);
     } else {
       setFormRole('PESERTA');
@@ -404,7 +405,7 @@ function AdminUsersContent() {
             <br />
             <strong>Nama | Email | Password | Role | Phone</strong>
             <br /><br />
-            Catatan: Role harus berupa PESERTA, PENGAWAS, atau ADMIN.
+            Catatan: Role harus berupa PESERTA, PENGAWAS, PANITIA, atau ADMIN.
           </Typography>
           <Button
             variant="outlined"

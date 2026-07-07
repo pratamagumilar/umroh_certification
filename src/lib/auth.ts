@@ -78,6 +78,8 @@ export function getDashboardByRole(role: string): string {
       return "/admin/dashboard";
     case "PENGAWAS":
       return "/pengawas/dashboard";
+    case "PANITIA":
+      return "/panitia/dashboard";
     case "PESERTA":
     default:
       return "/dashboard";

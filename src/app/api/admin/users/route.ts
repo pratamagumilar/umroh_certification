@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!["ADMIN", "PENGAWAS", "PESERTA"].includes(role)) {
+    if (!["ADMIN", "PANITIA", "PENGAWAS", "PESERTA"].includes(role)) {
       return NextResponse.json(
         { message: "Role tidak valid." },
         { status: 400 }

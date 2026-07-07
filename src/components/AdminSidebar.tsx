@@ -22,8 +22,11 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import ClassIcon from '@mui/icons-material/Class';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+
+import BookIcon from '@mui/icons-material/Book';
 
 const DRAWER_WIDTH = 260;
 
@@ -35,10 +38,13 @@ const menuItems = [
     basePath: '/admin/users',
     subItems: [
       { label: 'Admin', href: '/admin/users?role=ADMIN' },
+      { label: 'Panitia', href: '/admin/users?role=PANITIA' },
       { label: 'Pengawas', href: '/admin/users?role=PENGAWAS' },
       { label: 'Peserta', href: '/admin/users?role=PESERTA' },
     ],
   },
+  { label: 'Course', href: '/admin/courses', icon: <ClassIcon /> },
+  { label: 'Master Materi', href: '/admin/materials', icon: <BookIcon /> },
   { label: 'Kelola Ujian', href: '/admin/exams', icon: <QuizIcon /> },
   { label: 'Bank Soal', href: '/admin/question-banks', icon: <LibraryBooksIcon /> },
   { label: 'Monitoring Hasil', href: '/admin/results', icon: <AssessmentIcon /> },
