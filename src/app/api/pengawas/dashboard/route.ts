@@ -20,21 +20,37 @@ export async function GET() {
       where: { isActive: false },
     });
 
-    // Total Esai Belum Dinilai
-    // Esai yang disubmit (ada di ExamAnswer), tipe pertanyaannya ESSAY, dan score-nya masih null
-    const pendingEssaysCount = await prisma.examAnswer.count({
+    // Total Esai (Tugas) Belum Dinilai MVP 2/3: AssignmentSubmission
+    const pendingEssaysCount = await prisma.assignmentSubmission.count({
       where: {
-        score: null,
-        question: {
-          type: 'ESSAY'
+        status: 'SUBMITTED'
+      }
+    });
+
+    // SLA: Rata-rata waktu penilaian (gradedAt - submittedAt) dalam jam
+    const grades = await prisma.assignmentGrade.findMany({
+      where: { graderId: session.user.id },
+      select: {
+        gradedAt: true,
+        submission: {
+          select: { submittedAt: true }
         }
       }
     });
+
+    let totalHours = 0;
+    grades.forEach(g => {
+      const diffMs = g.gradedAt.getTime() - g.submission.submittedAt.getTime();
+      totalHours += diffMs / (1000 * 60 * 60);
+    });
+    
+    const averageSlaHours = grades.length > 0 ? (totalHours / grades.length).toFixed(1) : '0.0';
 
     return NextResponse.json({
       activeExamsCount,
       completedExamsCount,
       pendingEssaysCount,
+      averageSlaHours
     });
   } catch (error) {
     console.error("Dashboard pengawas error:", error);

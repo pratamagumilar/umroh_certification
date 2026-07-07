@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Alert,
   Box,
   Button,
   Chip,
@@ -26,6 +25,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { toast } from 'react-hot-toast';
 
 interface Course {
   id: string;
@@ -43,8 +43,6 @@ export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [createOpen, setCreateOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -54,14 +52,13 @@ export default function AdminCoursesPage() {
 
   const fetchCourses = useCallback(async () => {
     setLoading(true);
-    setError('');
     try {
       const res = await fetch('/api/admin/courses');
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Gagal memuat course.');
       setCourses(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal memuat course.');
+    } catch (err: any) {
+      toast.error(err.message || 'Gagal memuat course.');
     } finally {
       setLoading(false);
     }
@@ -75,17 +72,10 @@ export default function AdminCoursesPage() {
     setFormTitle('');
     setFormDescription('');
     setSelectedCourse(null);
-    setError('');
-  };
-
-  const showSuccess = (message: string) => {
-    setSuccess(message);
-    setTimeout(() => setSuccess(''), 3000);
   };
 
   const handleCreate = async () => {
     setFormLoading(true);
-    setError('');
     try {
       const res = await fetch('/api/admin/courses', {
         method: 'POST',
@@ -96,10 +86,10 @@ export default function AdminCoursesPage() {
       if (!res.ok) throw new Error(data.message || 'Gagal membuat course.');
       setCreateOpen(false);
       resetForm();
-      showSuccess('Course berhasil dibuat.');
+      toast.success('Course berhasil dibuat.');
       fetchCourses();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal membuat course.');
+    } catch (err: any) {
+      toast.error(err.message || 'Gagal membuat course.');
     } finally {
       setFormLoading(false);
     }
@@ -109,14 +99,12 @@ export default function AdminCoursesPage() {
     setSelectedCourse(course);
     setFormTitle(course.title);
     setFormDescription(course.description || '');
-    setError('');
     setEditOpen(true);
   };
 
   const handleEdit = async () => {
     if (!selectedCourse) return;
     setFormLoading(true);
-    setError('');
     try {
       const res = await fetch(`/api/admin/courses/${selectedCourse.id}`, {
         method: 'PATCH',
@@ -127,17 +115,16 @@ export default function AdminCoursesPage() {
       if (!res.ok) throw new Error(data.message || 'Gagal mengupdate course.');
       setEditOpen(false);
       resetForm();
-      showSuccess('Course berhasil diupdate.');
+      toast.success('Course berhasil diupdate.');
       fetchCourses();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal mengupdate course.');
+    } catch (err: any) {
+      toast.error(err.message || 'Gagal mengupdate course.');
     } finally {
       setFormLoading(false);
     }
   };
 
   const handleToggleActive = async (course: Course) => {
-    setError('');
     try {
       const res = await fetch(`/api/admin/courses/${course.id}`, {
         method: 'PATCH',
@@ -147,25 +134,24 @@ export default function AdminCoursesPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Gagal mengubah status course.');
       fetchCourses();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal mengubah status course.');
+    } catch (err: any) {
+      toast.error(err.message || 'Gagal mengubah status course.');
     }
   };
 
   const handleDelete = async () => {
     if (!selectedCourse) return;
     setFormLoading(true);
-    setError('');
     try {
       const res = await fetch(`/api/admin/courses/${selectedCourse.id}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Gagal menghapus course.');
       setDeleteOpen(false);
       resetForm();
-      showSuccess('Course berhasil dihapus.');
+      toast.success('Course berhasil dihapus.');
       fetchCourses();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal menghapus course.');
+    } catch (err: any) {
+      toast.error(err.message || 'Gagal menghapus course.');
     } finally {
       setFormLoading(false);
     }
@@ -214,9 +200,6 @@ export default function AdminCoursesPage() {
           Buat Course
         </Button>
       </Box>
-
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>

@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Chip, IconButton, Dialog, DialogTitle,
-  DialogContent, DialogActions, TextField, Alert, CircularProgress,
+  DialogContent, DialogActions, TextField, CircularProgress,
   Switch
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
+import { toast } from 'react-hot-toast';
 interface Assignment {
   id: string;
   title: string;
@@ -25,13 +25,11 @@ interface Assignment {
 export default function AdminAssignmentsPage() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
   const [open, setOpen] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [prompt, setPrompt] = useState('');
   const [maxScore, setMaxScore] = useState('100');
 
@@ -43,7 +41,7 @@ export default function AdminAssignmentsPage() {
       if (!res.ok) throw new Error(data.message || 'Gagal memuat tugas');
       setAssignments(data);
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message || 'Gagal memuat tugas');
     } finally {
       setLoading(false);
     }
@@ -56,6 +54,7 @@ export default function AdminAssignmentsPage() {
   const handleOpenCreate = () => {
     setEditId(null);
     setTitle('');
+    setDescription('');
     setPrompt('');
     setMaxScore('100');
     setOpen(true);
@@ -64,9 +63,8 @@ export default function AdminAssignmentsPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormLoading(true);
-    setError('');
     
-    const payload = { title, prompt, maxScore };
+    const payload = { title, description, prompt, maxScore };
     
     try {
       const url = editId ? `/api/admin/assignments/${editId}` : '/api/admin/assignments';
@@ -81,12 +79,11 @@ export default function AdminAssignmentsPage() {
       
       if (!res.ok) throw new Error(data.message);
       
-      setSuccess(editId ? 'Tugas berhasil diubah' : 'Tugas berhasil dibuat');
+      toast.success(editId ? 'Tugas berhasil diubah' : 'Tugas berhasil dibuat');
       setOpen(false);
       fetchAssignments();
-      setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message || 'Gagal menyimpan tugas');
     } finally {
       setFormLoading(false);
     }
@@ -102,9 +99,6 @@ export default function AdminAssignmentsPage() {
           Buat Tugas Baru
         </Button>
       </Box>
-
-      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       <TableContainer component={Paper} sx={{ borderRadius: '12px', border: '1px solid #e8e6df', boxShadow: 'none' }}>
         <Table>
@@ -154,6 +148,7 @@ export default function AdminAssignmentsPage() {
           <DialogTitle sx={{ fontWeight: 700 }}>{editId ? 'Edit Tugas' : 'Buat Tugas Baru'}</DialogTitle>
           <DialogContent>
             <TextField fullWidth label="Judul Tugas" value={title} onChange={(e) => setTitle(e.target.value)} margin="normal" required />
+            <TextField fullWidth label="Deskripsi & Instruksi (untuk peserta)" value={description} onChange={(e) => setDescription(e.target.value)} margin="normal" multiline minRows={2} />
             <TextField fullWidth label="Pertanyaan / Prompt Esai" value={prompt} onChange={(e) => setPrompt(e.target.value)} margin="normal" required multiline minRows={4} />
             <TextField fullWidth label="Nilai Maksimal (Max Score)" type="number" value={maxScore} onChange={(e) => setMaxScore(e.target.value)} margin="normal" required />
           </DialogContent>

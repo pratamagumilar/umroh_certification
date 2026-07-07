@@ -14,6 +14,7 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+import PageTransition from '@/components/PageTransition';
 
 const drawerWidth = 280;
 
@@ -233,7 +234,9 @@ export default function ParticipantLayout({ children }: { children: React.ReactN
           mx: 'auto'
         }}
       >
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </Box>
     </Box>
   );

@@ -8,6 +8,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import SupervisorAccountRoundedIcon from "@mui/icons-material/SupervisorAccountRounded";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import AdminCharts from "./AdminCharts";
 
 async function getStats() {
   const [totalPeserta, totalPengawas, totalExams, activeExams] =
@@ -18,7 +19,41 @@ async function getStats() {
       prisma.exam.count({ where: { isActive: true } }),
     ]);
 
-  return { totalPeserta, totalPengawas, totalExams, activeExams };
+  const activePeserta = await prisma.user.count({ where: { role: "PESERTA", isActive: true } });
+  const inactivePeserta = totalPeserta - activePeserta;
+
+  const courses = await prisma.course.findMany({
+    select: {
+      title: true,
+      enrollments: {
+        select: { status: true }
+      }
+    },
+    take: 5
+  });
+
+  const courseStats = courses.map(c => {
+    const total = c.enrollments.length;
+    const passed = c.enrollments.filter(e => e.status === 'COMPLETED').length;
+    return {
+      name: c.title.length > 20 ? c.title.substring(0, 20) + '...' : c.title,
+      total,
+      passed,
+      failed: total - passed
+    };
+  });
+
+  return { 
+    totalPeserta, 
+    totalPengawas, 
+    totalExams, 
+    activeExams,
+    userStats: [
+      { name: 'Aktif', value: activePeserta },
+      { name: 'Nonaktif', value: inactivePeserta }
+    ],
+    courseStats
+  };
 }
 
 export default async function AdminDashboard() {
@@ -132,6 +167,9 @@ export default async function AdminDashboard() {
           </Grid>
         ))}
       </Grid>
+
+      {/* Analytics Charts */}
+      <AdminCharts courseStats={stats.courseStats} userStats={stats.userStats} />
     </Box>
   );
 }

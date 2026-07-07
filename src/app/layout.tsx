@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Portal Sertifikasi Umroh",
 };
 
+import { Toaster } from 'react-hot-toast';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,6 +21,24 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <Providers>
+          <Toaster 
+            position="top-center"
+            toastOptions={{
+              style: {
+                borderRadius: '12px',
+                background: '#ffffff',
+                color: '#0f172a',
+                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                border: '1px solid #f1f5f9'
+              },
+              success: {
+                iconTheme: {
+                  primary: '#059669',
+                  secondary: '#ffffff',
+                },
+              },
+            }}
+          />
           {children}
         </Providers>
       </body>

@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import AdminSidebar, { DRAWER_WIDTH } from "@/components/AdminSidebar";
 import Box from "@mui/material/Box";
+import PageTransition from "@/components/PageTransition";
 
 export default async function AdminLayout({
   children,
@@ -27,7 +28,11 @@ export default async function AdminLayout({
           flexDirection: "column",
         }}
       >
-        <Box sx={{ p: 4, flexGrow: 1 }}>{children}</Box>
+        <Box sx={{ p: 4, flexGrow: 1 }}>
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </Box>
       </Box>
     </Box>
   );

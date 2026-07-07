@@ -31,6 +31,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import BookRoundedIcon from '@mui/icons-material/BookRounded';
+import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 
 const DRAWER_WIDTH = 280;
 
@@ -49,6 +50,7 @@ const menuItems = [
   },
   { label: 'Course', href: '/admin/courses', icon: <ClassRoundedIcon /> },
   { label: 'Master Materi', href: '/admin/materials', icon: <BookRoundedIcon /> },
+  { label: 'Master Tugas', href: '/admin/assignments', icon: <AssignmentRoundedIcon /> },
   { label: 'Kelola Ujian', href: '/admin/exams', icon: <QuizRoundedIcon /> },
   { label: 'Bank Soal', href: '/admin/question-banks', icon: <LibraryBooksRoundedIcon /> },
   { label: 'Monitoring Hasil', href: '/admin/results', icon: <AssessmentRoundedIcon /> },

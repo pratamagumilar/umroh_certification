@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import PengawasSidebar, { DRAWER_WIDTH } from "@/components/PengawasSidebar";
 import Box from "@mui/material/Box";
+import PageTransition from "@/components/PageTransition";
 
 export default async function PengawasLayout({
   children,
@@ -27,7 +28,11 @@ export default async function PengawasLayout({
           flexDirection: "column",
         }}
       >
-        <Box sx={{ p: 4, flexGrow: 1 }}>{children}</Box>
+        <Box sx={{ p: 4, flexGrow: 1 }}>
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </Box>
       </Box>
     </Box>
   );

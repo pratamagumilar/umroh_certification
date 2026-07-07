@@ -26,7 +26,10 @@ interface Submission {
     session: {
       material: {
         title: string;
-      };
+      } | null;
+      masterAssignment: {
+        title: string;
+      } | null;
       course: {
         title: string;
       };

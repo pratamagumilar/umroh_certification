@@ -46,6 +46,7 @@ interface Session {
   masterAssignment: {
     id: string;
     title: string;
+    description: string | null;
     prompt: string;
     maxScore: number;
   } | null;
@@ -416,7 +417,16 @@ export default function PesertaCourseDetailPage() {
                       </Box>
                     </Box>
                     
+                    {assignment.description && (
+                      <Paper elevation={0} sx={{ p: 3, bgcolor: '#fff', border: '1px solid #e0e0e0', mb: 2, borderRadius: '8px' }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: '#333' }}>Deskripsi & Instruksi</Typography>
+                        <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: '#555', lineHeight: 1.6 }}>
+                          {assignment.description}
+                        </Typography>
+                      </Paper>
+                    )}
                     <Paper elevation={0} sx={{ p: 3, bgcolor: '#fafafa', border: '1px solid #e0e0e0', mb: 4, borderRadius: '8px' }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, color: '#00bcd4' }}>Pertanyaan Esai</Typography>
                       <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: '#444', lineHeight: 1.6 }}>
                         {assignment.prompt}
                       </Typography>

@@ -11,6 +11,7 @@ interface DashboardData {
   activeExamsCount: number;
   completedExamsCount: number;
   pendingEssaysCount: number;
+  averageSlaHours: string;
 }
 
 export default function PengawasDashboard() {
@@ -71,6 +72,13 @@ export default function PengawasDashboard() {
       color: '#10b981',
       bgColor: 'rgba(16, 185, 129, 0.1)',
     },
+    {
+      title: 'SLA Penilaian (Jam)',
+      value: data.averageSlaHours,
+      icon: <GradingRoundedIcon sx={{ fontSize: 32 }} />,
+      color: '#8b5cf6',
+      bgColor: 'rgba(139, 92, 246, 0.1)',
+    },
   ];
 
   return (
@@ -118,7 +126,7 @@ export default function PengawasDashboard() {
       {/* Metric Cards */}
       <Grid container spacing={3}>
         {statCards.map((card, index) => (
-          <Grid key={index} size={{ xs: 12, md: 4 }}>
+          <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
             <Card
               sx={{
                 borderRadius: '20px',

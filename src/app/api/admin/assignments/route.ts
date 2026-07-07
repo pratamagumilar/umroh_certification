@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, prompt, maxScore } = body;
+    const { title, prompt, description, maxScore } = body;
 
     if (!title || !prompt) {
       return NextResponse.json({ message: 'Title and prompt are required' }, { status: 400 });
@@ -48,6 +48,7 @@ export async function POST(request: Request) {
     const newAssignment = await prisma.masterAssignment.create({
       data: {
         title,
+        description,
         prompt,
         maxScore: maxScore ? parseFloat(maxScore) : 100,
         createdById: session.user.id

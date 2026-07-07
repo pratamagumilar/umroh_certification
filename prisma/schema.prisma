@@ -209,6 +209,7 @@ model CourseSession {
 model MasterAssignment {
   id          String   @id @default(uuid())
   title       String
+  description String?  // Deskripsi atau instruksi untuk peserta
   prompt      String
   maxScore    Float    @default(100)
   isActive    Boolean  @default(true)

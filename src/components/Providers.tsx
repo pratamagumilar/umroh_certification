@@ -120,6 +120,35 @@ const theme = createTheme({
         },
       },
     },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          overflowX: 'auto',
+          /* Styling scrollbar webkit for modern look */
+          '&::-webkit-scrollbar': {
+            height: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f5f9',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#cbd5e1',
+            borderRadius: '4px',
+            '&:hover': {
+              background: '#94a3b8',
+            },
+          },
+        },
+      },
+    },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          minWidth: 800, // Forces horizontal scroll on mobile instead of crushing layout
+        },
+      },
+    },
   },
 });
 

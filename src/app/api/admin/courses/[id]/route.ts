@@ -15,13 +15,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         orderBy: { order: 'asc' },
         include: {
           material: true,
-          masterAssignment: true,
-          submissions: {
-            include: {
-              user: { select: { id: true, name: true, email: true } },
-              grades: { include: { grader: { select: { name: true } } } }
-            }
-          }
+          masterAssignment: true
         }
       },
       enrollments: { include: { user: { select: { id: true, name: true, email: true } } } },
