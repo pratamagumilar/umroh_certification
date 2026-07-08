@@ -89,7 +89,7 @@ export async function POST(
     if (!examResult) return NextResponse.json({ message: "Hasil ujian tidak ditemukan" }, { status: 404 });
 
     // Gunakan transaction agar aman
-    await prisma.$transaction(async (tx) => {
+    const txResult = await prisma.$transaction(async (tx) => {
       let totalEssayScore = 0;
 
       // Update skor tiap jawaban
@@ -131,7 +131,18 @@ export async function POST(
           finalStatus
         }
       });
+
+      return { finalStatus };
     });
+
+    // Auto-generate certificate if passed immediately
+    if (txResult.finalStatus === 'LULUS') {
+      const { generateAndSaveCertificate } = await import('@/lib/certificateGenerator');
+      // Jalankan di background (jangan await)
+      generateAndSaveCertificate(userId, examId).catch(err => {
+        console.error('Failed to auto-generate certificate on grading:', err);
+      });
+    }
 
     return NextResponse.json({ message: "Penilaian berhasil disimpan" });
   } catch (error) {

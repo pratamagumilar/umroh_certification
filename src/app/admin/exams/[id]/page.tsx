@@ -181,7 +181,7 @@ export default function ExamDetailPage() {
               {exam.description}
             </Typography>
           )}
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 3, alignItems: 'center' }}>
             <Chip label={`${exam.questions?.length || 0} Soal`} color="primary" />
             <Chip label={`${exam.durationMinutes} Menit`} color="secondary" />
             <Chip
@@ -189,6 +189,14 @@ export default function ExamDetailPage() {
               color={exam.isActive ? 'success' : 'default'}
               variant="outlined"
             />
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => router.push(`/admin/exams/${examId}/monitor`)}
+              sx={{ fontWeight: 600, ml: 'auto' }}
+            >
+              Live Monitoring
+            </Button>
           </Box>
         </CardContent>
       </Card>

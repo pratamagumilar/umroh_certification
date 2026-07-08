@@ -46,8 +46,8 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
         const resData = await res.json();
         if (res.ok) {
           setData(resData);
-          // Calculate initial time left
-          const endTime = new Date(resData.exam.startTime).getTime() + (resData.exam.durationMinutes * 60000);
+          // Calculate initial time left based on when they started (scanTime)
+          const endTime = new Date(resData.attendance.scanTime).getTime() + (resData.exam.durationMinutes * 60000);
           const now = Date.now();
           const diffSeconds = Math.max(0, Math.floor((endTime - now) / 1000));
           setTimeLeft(diffSeconds);
@@ -77,7 +77,8 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [submitting]); // Remove timeLeft from dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft !== null, submitting]);
 
   // Auto submit when time is up
   useEffect(() => {

@@ -25,7 +25,7 @@ interface MonitorData {
   participants: Participant[];
 }
 
-export default function PengawasMonitorPage({ params }: { params: Promise<{ id: string }> }) {
+export default function AdminMonitorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: examId } = use(params);
   const [data, setData] = useState<MonitorData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
 
   const fetchMonitorData = async () => {
     try {
-      const res = await fetch(`/api/pengawas/exams/${examId}/monitor`);
+      const res = await fetch(`/api/admin/exams/${examId}/monitor`);
       const result = await res.json();
       if (res.ok) {
         setData(result);
@@ -50,7 +50,7 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
   const handleReset = async (userId: string) => {
     if (!confirm('Yakin ingin mereset sesi peserta ini? Semua nilai akan terhapus dan mereka harus mengulang dari awal.')) return;
     try {
-      const res = await fetch(`/api/pengawas/exams/${examId}/monitor/reset`, {
+      const res = await fetch(`/api/admin/exams/${examId}/monitor/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId })
@@ -77,7 +77,7 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
     }
     
     try {
-      const res = await fetch(`/api/pengawas/exams/${examId}/monitor/add-time`, {
+      const res = await fetch(`/api/admin/exams/${examId}/monitor/add-time`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, minutes })
@@ -114,7 +114,7 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
   if (error || !data) {
     return (
       <Box>
-        <Button component={Link} href="/pengawas/exams" startIcon={<ArrowBackIcon />} sx={{ mb: 3 }}>
+        <Button component={Link} href="/admin/exams" startIcon={<ArrowBackIcon />} sx={{ mb: 3 }}>
           Kembali ke Daftar Ujian
         </Button>
         <Alert severity="error">{error || 'Data tidak ditemukan'}</Alert>
@@ -125,7 +125,7 @@ export default function PengawasMonitorPage({ params }: { params: Promise<{ id: 
   return (
     <Box>
       <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Button component={Link} href="/pengawas/exams" startIcon={<ArrowBackIcon />} sx={{ width: 'fit-content', mb: 1, color: '#78867a' }}>
+        <Button component={Link} href="/admin/exams" startIcon={<ArrowBackIcon />} sx={{ width: 'fit-content', mb: 1, color: '#78867a' }}>
           Kembali
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

@@ -114,8 +114,14 @@ export async function POST(
       include: { question: true }
     });
 
+    const examData = await prisma.exam.findUnique({
+      where: { id: examId },
+      select: { passingGrade: true }
+    });
+
     let pgScore = 0;
     let totalPg = 0;
+    let hasEssay = false;
 
     const answerRecords: any[] = [];
 
@@ -131,6 +137,8 @@ export async function POST(
         } else {
           scoreForThisQuestion = 0;
         }
+      } else if (q.type === 'ESAI') {
+        hasEssay = true;
       }
 
       answerRecords.push({
@@ -148,6 +156,11 @@ export async function POST(
     // Kalkulasi skor PG (misal skala 100)
     const finalPgScore = totalPg > 0 ? (pgScore / totalPg) * 100 : 0;
 
+    let finalStatus = 'PENDING';
+    if (!hasEssay && examData) {
+      finalStatus = finalPgScore >= examData.passingGrade ? 'LULUS' : 'TIDAK_LULUS';
+    }
+
     // Simpan semua ke DB dalam satu transaksi
     await prisma.$transaction(async (tx) => {
       // 1. Simpan jawaban
@@ -157,19 +170,29 @@ export async function POST(
         });
       }
 
-      // 2. Simpan Result (skor PG masuk, skor Esai 0, finalStatus PENDING)
+      // 2. Simpan Result
       await tx.examResult.create({
         data: {
           userId: user.id,
           examId,
           pgScore: finalPgScore,
           essayScore: 0,
-          finalStatus: 'PENDING'
+          finalStatus
         }
       });
     });
 
-    return NextResponse.json({ message: 'Ujian berhasil dikumpulkan' });
+    // Auto-generate certificate if passed immediately
+    if (finalStatus === 'LULUS') {
+      // Import dynamically to avoid circular issues or just call it here
+      const { generateAndSaveCertificate } = await import('@/lib/certificateGenerator');
+      // Jalankan di background (jangan await)
+      generateAndSaveCertificate(user.id, examId).catch(err => {
+        console.error('Failed to auto-generate certificate:', err);
+      });
+    }
+
+    return NextResponse.json({ message: 'Ujian berhasil dikumpulkan', finalStatus });
   } catch (error) {
     console.error('Submit exam error:', error);
     return NextResponse.json({ message: 'Terjadi kesalahan server saat mengumpulkan ujian' }, { status: 500 });

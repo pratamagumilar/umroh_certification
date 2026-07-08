@@ -86,22 +86,28 @@ Berikut item yang belum ada atau belum optimal untuk menjadikan Tugas benar-bena
 Fitur ini bertujuan untuk mengotomatisasi penerbitan sertifikat bagi peserta yang lulus ujian (status: `LULUS`) dengan menggunakan template desain yang elegan. Sertifikat tersebut dapat langsung diakses dan diunduh oleh peserta dari *dashboard* mereka.
 
 **Step-by-step Pengerjaan:**
-- [ ] **Refactoring Modul Sertifikat (`src/lib/certificateGenerator.ts`)**
+- [x] **Refactoring Modul Sertifikat (`src/lib/certificateGenerator.ts`)**
   Memisahkan logika `jsPDF` dari *route handler* ke *helper/service* independen agar bisa dipanggil (reusable) dari API mana pun.
-- [ ] **Desain Template jsPDF Premium**
+- [x] **Desain Template jsPDF Premium**
   Meningkatkan desain sertifikat dengan border, elemen grafis, tipografi (font) yang elegan, stempel/logo (opsional jika aset tersedia), serta memposisikan nama peserta, judul ujian, dan tanggal secara presisi.
-- [ ] **Otomatisasi Penerbitan pada Auto-Grading (PG)**
+- [x] **Otomatisasi Penerbitan pada Auto-Grading (PG)**
   Meng-update API `POST /api/exams/[id]/take` agar: 
   - Setelah ujian selesai dan dihitung skor akhir PG-nya, jika status final adalah `LULUS`, langsung panggil fungsi `generateCertificate` di _background_.
-- [ ] **Otomatisasi Penerbitan pada Manual-Grading (Esai)**
+- [x] **Otomatisasi Penerbitan pada Manual-Grading (Esai)**
   Meng-update API `POST /api/pengawas/grading/[examId]/[userId]` agar:
   - Setelah pengawas memasukkan nilai esai, skor akhir dikalkulasi. Jika hasilnya `LULUS`, langsung panggil fungsi `generateCertificate`.
-- [ ] **UI Download Sertifikat di Dashboard Peserta**
+- [x] **UI Download Sertifikat di Dashboard Peserta**
   Memperbarui halaman `src/app/(participant)/dashboard/page.tsx`:
   - Menampilkan sertifikat yang sudah diterbitkan pada *tab* atau *card* khusus.
   - Menyediakan tombol "Unduh Sertifikat" yang terhubung langsung ke URL sertifikat PDF.
-- [ ] **Sinkronisasi Otomatis**
+- [x] **Sinkronisasi Otomatis**
   Memastikan setiap *re-generate* atau pembuatan awal langsung terunggah ke sistem *storage* lokal atau Supabase (melalui `lib/storage.ts`) dan meng-*update* database tabel `Certificate`.
+
+### 7. Live Exam Monitoring & Reset
+Fitur untuk membantu Panitia/Pengawas mengontrol sesi ujian yang sedang berjalan.
+- [x] **Tabel Monitoring Aktif**: Admin atau Pengawas dapat melihat daftar peserta yang sedang mengerjakan ujian secara _live_.
+- [x] **Reset Sesi (Re-take)**: Jika peserta mengalami *error* fatal atau mati listrik, Admin dapat mereset (menghapus) rekam `ExamResult`, `ExamAnswer`, dan `Attendance` agar peserta bisa masuk kembali ke halaman ujian dari awal.
+- [x] **Penambahan Waktu (Opsional)**: Kemampuan untuk memanipulasi `scanTime` pada tabel `Attendance` atau membuat record `ExamExtension` agar waktu/timer ujian peserta bertambah.
 
 ---
 
@@ -109,6 +115,8 @@ Fitur ini bertujuan untuk mengotomatisasi penerbitan sertifikat bagi peserta yan
 
 | Tanggal | Area | Status | Catatan |
 |---|---|---|---|
+| 2026-07-07 | Live Monitoring Ujian | Done | Tabel monitoring realtime, fitur reset sesi, dan penambahan durasi ujian via manipulasi scanTime. Timer di UI juga diperbaiki. |
+| 2026-07-07 | Sertifikat Otomatis & Template | Done | Refactor jsPDF ke template premium, injeksi auto-generate di PG & Essay grading, dashboard peserta otomatis. |
 | 2026-07-07 | Fitur Tugas Mandiri | Done | Schema database, API admin, form tugas, dan UI peserta sudah mendukung rendering masterAssignment description. |
 | 2026-07-07 | UI/UX Revamp | Done | Revamp UI/UX untuk mode Peserta, Admin, dan Pengawas (sidebar, dashboard, glassmorphism). |
 | 2026-07-06 | Perencanaan MVP 3 | Planned | MVP 3 Plan dibuat menyusul selesainya fitur-fitur utama di MVP 2. |

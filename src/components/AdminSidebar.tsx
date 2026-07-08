@@ -40,7 +40,6 @@ const menuItems = [
   {
     label: 'Kelola User',
     icon: <PeopleRoundedIcon />,
-    basePath: '/admin/users',
     subItems: [
       { label: 'Admin', href: '/admin/users?role=ADMIN' },
       { label: 'Panitia', href: '/admin/users?role=PANITIA' },
@@ -49,11 +48,23 @@ const menuItems = [
     ],
   },
   { label: 'Course', href: '/admin/courses', icon: <ClassRoundedIcon /> },
-  { label: 'Master Materi', href: '/admin/materials', icon: <BookRoundedIcon /> },
-  { label: 'Master Tugas', href: '/admin/assignments', icon: <AssignmentRoundedIcon /> },
-  { label: 'Kelola Ujian', href: '/admin/exams', icon: <QuizRoundedIcon /> },
-  { label: 'Bank Soal', href: '/admin/question-banks', icon: <LibraryBooksRoundedIcon /> },
-  { label: 'Monitoring Hasil', href: '/admin/results', icon: <AssessmentRoundedIcon /> },
+  {
+    label: 'Master Data',
+    icon: <BookRoundedIcon />,
+    subItems: [
+      { label: 'Master Materi', href: '/admin/materials' },
+      { label: 'Master Tugas', href: '/admin/assignments' },
+    ],
+  },
+  {
+    label: 'Manajemen Ujian',
+    icon: <QuizRoundedIcon />,
+    subItems: [
+      { label: 'Kelola Ujian', href: '/admin/exams' },
+      { label: 'Bank Soal', href: '/admin/question-banks' },
+      { label: 'Monitoring Hasil', href: '/admin/results' },
+    ],
+  },
   { label: 'Kelola Sertifikat', href: '/admin/certificates', icon: <CardMembershipRoundedIcon /> },
 ];
 
@@ -63,11 +74,38 @@ export default function AdminSidebar() {
   const currentRole = searchParams.get('role');
   const { data: session } = useSession();
 
-  const [openUsers, setOpenUsers] = useState(true);
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
+    'Kelola User': false,
+    'Master Data': false,
+    'Manajemen Ujian': false,
+  });
 
-  const handleToggleUsers = () => {
-    setOpenUsers(!openUsers);
+  const handleToggleMenu = (label: string) => {
+    setOpenMenus((prev) => ({ ...prev, [label]: !prev[label] }));
   };
+
+  // Initialize open state based on active path
+  React.useEffect(() => {
+    setOpenMenus((prev) => {
+      const newOpen = { ...prev };
+      let changed = false;
+      menuItems.forEach((item) => {
+        if (item.subItems) {
+          const isActive = item.subItems.some((sub) => {
+            if (sub.href.includes('role=')) {
+               return pathname === '/admin/users' && (!currentRole || sub.href.includes(currentRole));
+            }
+            return pathname === sub.href || pathname.startsWith(sub.href + '/');
+          });
+          if (isActive && !newOpen[item.label]) {
+            newOpen[item.label] = true;
+            changed = true;
+          }
+        }
+      });
+      return changed ? newOpen : prev;
+    });
+  }, [pathname, currentRole]);
 
   return (
     <Drawer
@@ -109,12 +147,19 @@ export default function AdminSidebar() {
       <List sx={{ px: 2, flexGrow: 1 }}>
         {menuItems.map((item) => {
           if (item.subItems) {
-            const isBaseActive = pathname === item.basePath || pathname.startsWith(item.basePath + '/');
+            const isBaseActive = item.subItems.some((sub) => {
+              if (sub.href.includes('role=')) {
+                 return pathname === '/admin/users' && (!currentRole || sub.href.includes(currentRole));
+              }
+              return pathname === sub.href || pathname.startsWith(sub.href + '/');
+            });
+            const isOpen = openMenus[item.label];
+
             return (
               <React.Fragment key={item.label}>
                 <ListItem disablePadding sx={{ mb: 0.5 }}>
                   <ListItemButton
-                    onClick={handleToggleUsers}
+                    onClick={() => handleToggleMenu(item.label)}
                     sx={{
                       borderRadius: '12px',
                       py: 1.2,
@@ -140,17 +185,19 @@ export default function AdminSidebar() {
                         },
                       }}
                     />
-                    {openUsers ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+                    {isOpen ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
                   </ListItemButton>
                 </ListItem>
 
-                <Collapse in={openUsers} timeout="auto" unmountOnExit>
+                <Collapse in={isOpen} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {item.subItems.map((subItem) => {
                       let isActive = false;
                       if (subItem.href === '/admin/users' && !currentRole) isActive = true;
-                      if (subItem.href.includes('role=') && currentRole && subItem.href.includes(`role=${currentRole}`)) {
+                      if (subItem.href.includes('role=') && pathname === '/admin/users' && currentRole && subItem.href.includes(`role=${currentRole}`)) {
                         isActive = true;
+                      } else if (!subItem.href.includes('role=')) {
+                        isActive = pathname === subItem.href || pathname.startsWith(subItem.href + '/');
                       }
 
                       return (
