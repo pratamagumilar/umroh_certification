@@ -39,18 +39,7 @@ import EnrollParticipantModal from '@/components/modals/EnrollParticipantModal';
 import CourseExamModal from '@/components/modals/CourseExamModal';
 
 
-  // Pagination States
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -130,6 +119,19 @@ export default function AdminCourseDetailPage() {
 
   const [activeTab, setActiveTab] = useState(0);
   const [error, setError] = useState('');
+
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   const [success, setSuccess] = useState('');
   const [formLoading, setFormLoading] = useState(false);
 
