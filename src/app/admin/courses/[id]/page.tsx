@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import {
   Box, Typography, Button, Card, CardContent, Chip, Grid,
   Alert, CircularProgress, Paper,
-  Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination,
   IconButton, FormControl, Select, MenuItem
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -38,7 +38,21 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import EnrollParticipantModal from '@/components/modals/EnrollParticipantModal';
 import CourseExamModal from '@/components/modals/CourseExamModal';
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 // Sortable Item Component
 function SortableSessionItem({ session, onToggleLock, onDelete }: any) {
@@ -445,6 +459,17 @@ export default function AdminCourseDetailPage() {
                 ))}
               </TableBody>
             </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
           </TableContainer>
         </Box>
       )}
@@ -496,6 +521,17 @@ export default function AdminCourseDetailPage() {
                 ))}
               </TableBody>
             </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
           </TableContainer>
         </Box>
       )}

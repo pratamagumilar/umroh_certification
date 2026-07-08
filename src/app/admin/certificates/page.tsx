@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
+  TablePagination,
   TableHead, TableRow, Paper, Chip, CircularProgress, Alert
 } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -31,6 +32,20 @@ function AdminCertificatesContent() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [generatingId, setGeneratingId] = useState<string | null>(null);
+
+  
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const fetchCertificates = useCallback(async () => {
     setLoading(true);
@@ -181,6 +196,17 @@ function AdminCertificatesContent() {
             )}
           </TableBody>
         </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
       </TableContainer>
     </Box>
   );

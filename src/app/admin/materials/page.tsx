@@ -22,6 +22,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  TablePagination,
   Link as MuiLink
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -57,6 +58,19 @@ export default function AdminMaterialsPage() {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
+
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   
   // Form States
   const [formTitle, setFormTitle] = useState('');
@@ -266,7 +280,7 @@ export default function AdminMaterialsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {materials.map((mat) => (
+              {materials.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((mat) => (
                 <TableRow key={mat.id} hover>
                   <TableCell>
                     <Typography sx={{ fontWeight: 700, color: '#2c352d' }}>{mat.title}</Typography>
@@ -305,6 +319,17 @@ export default function AdminMaterialsPage() {
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
         </TableContainer>
       )}
 

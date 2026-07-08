@@ -17,6 +17,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TablePagination,
   TableHead,
   TableRow,
   TextField,
@@ -49,6 +50,20 @@ export default function AdminCoursesPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [formTitle, setFormTitle] = useState('');
   const [formDescription, setFormDescription] = useState('');
+
+  
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const fetchCourses = useCallback(async () => {
     setLoading(true);
@@ -225,7 +240,7 @@ export default function AdminCoursesPage() {
                     Belum ada course.
                   </TableCell>
                 </TableRow>
-              ) : courses.map((course) => (
+              ) : courses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((course) => (
                 <TableRow key={course.id} hover>
                   <TableCell>
                     <Typography 
@@ -275,6 +290,17 @@ export default function AdminCoursesPage() {
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
         </TableContainer>
       )}
 

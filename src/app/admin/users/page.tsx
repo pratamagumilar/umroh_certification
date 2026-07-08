@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
+  TablePagination,
   TableHead, TableRow, Paper, Chip, IconButton, TextField, MenuItem,
   Dialog, DialogTitle, DialogContent, DialogActions, Alert, CircularProgress, Switch,
 } from '@mui/material';
@@ -60,6 +61,20 @@ function AdminUsersContent() {
   const [formPassword, setFormPassword] = useState('');
   const [formRole, setFormRole] = useState('PESERTA');
   const [formPhone, setFormPhone] = useState('');
+
+  
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -329,7 +344,7 @@ function AdminUsersContent() {
                 </TableCell>
               </TableRow>
             ) : (
-              users.map((user) => (
+              users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
                 <TableRow key={user.id} hover>
                   <TableCell sx={{ fontWeight: 600 }}>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
@@ -378,6 +393,17 @@ function AdminUsersContent() {
             )}
           </TableBody>
         </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
       </TableContainer>
 
       {/* Create Dialog */}

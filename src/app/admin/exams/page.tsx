@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
+  TablePagination,
   TableHead, TableRow, Paper, Chip, IconButton, Switch,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField, Alert, CircularProgress,
 } from '@mui/material';
@@ -42,6 +43,20 @@ export default function AdminExamsPage() {
   const [formDesc, setFormDesc] = useState('');
   const [formStartTime, setFormStartTime] = useState('');
   const [formDuration, setFormDuration] = useState('60');
+
+  
+  // Pagination States
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const fetchExams = useCallback(async () => {
     setLoading(true);
@@ -253,7 +268,7 @@ export default function AdminExamsPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              exams.map((exam) => (
+              exams.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((exam) => (
                 <TableRow key={exam.id} hover>
                   <TableCell sx={{ fontWeight: 600 }}>{exam.title}</TableCell>
                   <TableCell>
@@ -293,6 +308,17 @@ export default function AdminExamsPage() {
             )}
           </TableBody>
         </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={-1}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Baris per halaman:"
+            labelDisplayedRows={({ from, to }) => `${from}-${to}`}
+          />
       </TableContainer>
 
       {/* Create Dialog */}
