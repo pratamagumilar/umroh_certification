@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
-  Button, FormControl, InputLabel, Select, MenuItem, CircularProgress, Box
+  Button, CircularProgress, Box, Autocomplete, TextField
 } from '@mui/material';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
@@ -23,7 +23,7 @@ interface EnrollParticipantModalProps {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function EnrollParticipantModal({ open, onClose, courseId, enrolledUserIds, onSuccess }: EnrollParticipantModalProps) {
-  const [selectedUserId, setSelectedUserId] = useState('');
+  const [selectedUser, setSelectedUser] = useState<UserDropdownItem | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Fetch users when modal is open
@@ -34,20 +34,20 @@ export default function EnrollParticipantModal({ open, onClose, courseId, enroll
 
   useEffect(() => {
     if (!open) {
-      setSelectedUserId('');
+      setSelectedUser(null);
     }
   }, [open]);
 
   const availableUsers = users?.filter(u => !enrolledUserIds.includes(u.id)) || [];
 
   const handleEnroll = async () => {
-    if (!selectedUserId) return;
+    if (!selectedUser) return;
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/courses/${courseId}/enrollments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: selectedUserId })
+        body: JSON.stringify({ userId: selectedUser.id })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
@@ -63,9 +63,9 @@ export default function EnrollParticipantModal({ open, onClose, courseId, enroll
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ fontWeight: 700 }}>Enroll Peserta</DialogTitle>
-      <DialogContent sx={{ pt: '16px !important' }}>
+      <DialogContent sx={{ pt: '24px !important', minHeight: '150px' }}>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
             <CircularProgress size={24} />
@@ -73,26 +73,26 @@ export default function EnrollParticipantModal({ open, onClose, courseId, enroll
         ) : error ? (
           <Box sx={{ p: 2, color: 'error.main' }}>Gagal memuat peserta</Box>
         ) : (
-          <FormControl fullWidth>
-            <InputLabel>Pilih Peserta</InputLabel>
-            <Select
-              value={selectedUserId}
-              label="Pilih Peserta"
-              onChange={(e) => setSelectedUserId(e.target.value)}
-            >
-              {availableUsers.map((u) => (
-                <MenuItem key={u.id} value={u.id}>{u.name} ({u.email})</MenuItem>
-              ))}
-              {availableUsers.length === 0 && (
-                <MenuItem disabled value="">Tidak ada peserta yang tersedia</MenuItem>
-              )}
-            </Select>
-          </FormControl>
+          <Autocomplete
+            options={availableUsers}
+            getOptionLabel={(option) => `${option.name} (${option.email})`}
+            value={selectedUser}
+            onChange={(event, newValue) => setSelectedUser(newValue)}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            renderInput={(params) => (
+              <TextField 
+                {...params} 
+                label="Cari & Pilih Peserta" 
+                placeholder="Ketik nama atau email..."
+              />
+            )}
+            noOptionsText={availableUsers.length === 0 ? "Semua peserta sudah terdaftar di course ini" : "Peserta tidak ditemukan"}
+          />
         )}
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onClose} disabled={loading}>Batal</Button>
-        <Button variant="contained" onClick={handleEnroll} disabled={loading || !selectedUserId || isLoading}>
+        <Button variant="contained" onClick={handleEnroll} disabled={loading || !selectedUser || isLoading}>
           Daftarkan
         </Button>
       </DialogActions>
