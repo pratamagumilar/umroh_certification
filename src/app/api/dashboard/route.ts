@@ -20,50 +20,54 @@ export async function GET(req: Request) {
     }
 
     // if ADMIN, might return empty or logic for admin dashboard, but here we focus on PESERTA
-    
-    // Fetch active exams (that haven't been completed by the user)
+
+    // Fetch all dashboard data in parallel
     const now = new Date();
-    const activeExams = await prisma.exam.findMany({
-      where: {
-        isActive: true,
-        // either not started yet, or currently running
-        // user hasn't submitted yet
-        examResults: {
-          none: { userId: user.id }
-        }
-      },
-      orderBy: { startTime: 'asc' },
-      take: 5
-    });
-
-    // Fetch exam results
-    const results = await prisma.examResult.findMany({
-      where: { userId: user.id },
-      include: {
-        exam: {
-          select: { title: true }
-        }
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 5
-    });
-
-    // Fetch certificates
-    const certificates = await prisma.certificate.findMany({
-      where: { userId: user.id },
-      include: {
-        exam: {
-          select: { title: true }
-        }
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 5
-    });
+    const [activeExams, results, certificates] = await Promise.all([
+      prisma.exam.findMany({
+        where: {
+          isActive: true,
+          examResults: {
+            none: { userId: user.id },
+          },
+        },
+        orderBy: { startTime: "asc" },
+        take: 5,
+      }),
+      prisma.examResult.findMany({
+        where: { userId: user.id },
+        select: {
+          id: true,
+          pgScore: true,
+          essayScore: true,
+          finalStatus: true,
+          createdAt: true,
+          exam: {
+            select: { id: true, title: true },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+      }),
+      prisma.certificate.findMany({
+        where: { userId: user.id },
+        select: {
+          id: true,
+          pdfUrl: true,
+          createdAt: true,
+          exam: {
+            select: { id: true, title: true },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+      }),
+    ]);
 
     return NextResponse.json({
       activeExams,
       results,
-      certificates
+      certificates,
     });
   } catch (error) {
     console.error('Fetch dashboard error:', error);

@@ -12,23 +12,40 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const role = searchParams.get("role");
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 100);
 
-  const users = await prisma.user.findMany({
-    where: role ? { role } : undefined,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      phone: true,
-      photoUrl: true,
-      isActive: true,
-      createdAt: true,
+  const where = role ? { role } : {};
+
+  const [users, total] = await prisma.$transaction([
+    prisma.user.findMany({
+      where,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        phone: true,
+        photoUrl: true,
+        isActive: true,
+        createdAt: true,
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.user.count({ where }),
+  ]);
+
+  return NextResponse.json({
+    data: users,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
     },
-    orderBy: { createdAt: "desc" },
   });
-
-  return NextResponse.json(users);
 }
 
 export async function POST(req: Request) {

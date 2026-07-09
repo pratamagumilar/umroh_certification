@@ -11,24 +11,44 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const examId = searchParams.get('examId');
+    const examId = searchParams.get("examId");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 100);
 
-    const results = await prisma.examResult.findMany({
-      where: examId ? { examId } : undefined,
-      include: {
-        user: {
-          select: { id: true, name: true, email: true }
+    const where = examId ? { examId } : {};
+
+    const [results, total] = await prisma.$transaction([
+      prisma.examResult.findMany({
+        where,
+        select: {
+          id: true,
+          pgScore: true,
+          essayScore: true,
+          finalStatus: true,
+          createdAt: true,
+          user: {
+            select: { id: true, name: true, email: true },
+          },
+          exam: {
+            select: { id: true, title: true, passingGrade: true },
+          },
         },
-        exam: {
-          select: { id: true, title: true, passingGrade: true }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
+        take: limit,
+        skip: (page - 1) * limit,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.examResult.count({ where }),
+    ]);
 
-    return NextResponse.json(results);
+    return NextResponse.json({
+      data: results,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error('Fetch results error:', error);
     return NextResponse.json({ message: 'Terjadi kesalahan server' }, { status: 500 });

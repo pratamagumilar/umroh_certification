@@ -32,26 +32,31 @@ export async function GET(
       }
     });
 
-    // Hitung esai yang pending per user
-    const participantsWithStats = await Promise.all(pendingResults.map(async (result) => {
-      const pendingEssays = await prisma.examAnswer.count({
-        where: {
-          userId: result.userId,
-          score: null,
-          question: {
-            type: "ESSAY",
-            exams: { some: { examId } }
-          }
-        }
-      });
+    // Single query: hitung essay pending per user sekaligus
+    const userIds = pendingResults.map((r) => r.userId);
+    const pendingEssayCounts = await prisma.examAnswer.groupBy({
+      by: ["userId"],
+      where: {
+        userId: { in: userIds },
+        score: null,
+        question: {
+          type: "ESSAY",
+          exams: { some: { examId } },
+        },
+      },
+      _count: { id: true },
+    });
 
-      return {
-        id: result.userId,
-        name: result.user.name,
-        email: result.user.email,
-        pendingEssaysCount: pendingEssays,
-        pgScore: result.pgScore
-      };
+    const countMap = new Map(
+      pendingEssayCounts.map((item) => [item.userId, item._count.id])
+    );
+
+    const participantsWithStats = pendingResults.map((result) => ({
+      id: result.userId,
+      name: result.user.name,
+      email: result.user.email,
+      pendingEssaysCount: countMap.get(result.userId) ?? 0,
+      pgScore: result.pgScore,
     }));
 
     // Hanya tampilkan peserta yang benar-benar memiliki essay pending

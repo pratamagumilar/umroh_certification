@@ -3,15 +3,28 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const courses = await prisma.course.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { _count: { select: { sessions: true, enrollments: true } } }
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 100);
+
+  const [courses, total] = await prisma.$transaction([
+    prisma.course.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      orderBy: { createdAt: "desc" },
+      include: { _count: { select: { sessions: true, enrollments: true } } },
+    }),
+    prisma.course.count(),
+  ]);
+
+  return NextResponse.json({
+    data: courses,
+    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
   });
-  return NextResponse.json(courses);
 }
 
 export async function POST(req: Request) {

@@ -24,7 +24,8 @@ export async function POST(req: Request) {
     const sheet = workbook.Sheets[sheetName];
     
     // Parse as 2D array
-    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][];
     
     // Asumsi baris pertama adalah Header: [Nama, Email, Password, Role, Phone]
     const rows = data.slice(1).filter(row => row.length >= 3 && row[0] && row[1] && row[2]);
@@ -33,51 +34,100 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'File kosong atau format salah.' }, { status: 400 });
     }
 
-    let successCount = 0;
-    const errors: string[] = [];
+    // Validasi & normalisasi rows
+    const validRows = rows
+      .map((row, idx) => {
+        const name = String(row[0] || "").trim();
+        const email = String(row[1] || "").trim().toLowerCase();
+        const rawPassword = String(row[2] || "").trim();
+        let role = String(row[3] || "PESERTA").toUpperCase().trim();
+        const phone = String(row[4] || "").trim();
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const name = String(row[0] || '').trim();
-      const email = String(row[1] || '').trim();
-      const rawPassword = String(row[2] || '').trim();
-      let role = String(row[3] || 'PESERTA').toUpperCase().trim();
-      const phone = String(row[4] || '').trim();
-
-      // Fallback validasi role
-      if (!['PESERTA', 'PENGAWAS', 'ADMIN', 'PANITIA'].includes(role)) {
-        role = 'PESERTA';
-      }
-
-      try {
-        const existing = await prisma.user.findUnique({ where: { email } });
-        if (existing) {
-          errors.push(`Baris ${i + 2}: Email '${email}' sudah digunakan`);
-          continue;
+        if (!["PESERTA", "PENGAWAS", "ADMIN", "PANITIA"].includes(role)) {
+          role = "PESERTA";
         }
 
-        const hashedPassword = await bcrypt.hash(rawPassword, 10);
-        await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: hashedPassword,
-            role,
-            phone: phone || null,
-          }
+        return { rowIndex: idx + 2, name, email, rawPassword, role, phone };
+      })
+      .filter((r) => r.name && r.email && r.rawPassword);
+
+    if (validRows.length === 0) {
+      return NextResponse.json(
+        { message: "Tidak ada data valid yang bisa diimpor." },
+        { status: 400 }
+      );
+    }
+
+    // Cek email duplikat dalam file + database sekaligus
+    const emails = validRows.map((r) => r.email);
+    const emailSet = new Set<string>();
+    const duplicateInFile: string[] = [];
+
+    for (const email of emails) {
+      if (emailSet.has(email)) duplicateInFile.push(email);
+      emailSet.add(email);
+    }
+
+    const existingUsers = await prisma.user.findMany({
+      where: { email: { in: emails } },
+      select: { email: true },
+    });
+    const existingEmails = new Set(existingUsers.map((u) => u.email));
+
+    const errors: string[] = [];
+    const toCreate: {
+      name: string;
+      email: string;
+      password: string;
+      role: string;
+      phone: string | null;
+    }[] = [];
+
+    for (const row of validRows) {
+      if (duplicateInFile.includes(row.email)) {
+        errors.push(`Baris ${row.rowIndex}: Email '${row.email}' duplikat dalam file`);
+        continue;
+      }
+      if (existingEmails.has(row.email)) {
+        errors.push(
+          `Baris ${row.rowIndex}: Email '${row.email}' sudah terdaftar`
+        );
+        continue;
+      }
+      const hashedPassword = await bcrypt.hash(row.rawPassword, 10);
+      toCreate.push({
+        name: row.name,
+        email: row.email,
+        password: hashedPassword,
+        role: row.role,
+        phone: row.phone || null,
+      });
+    }
+
+    // Batch insert
+    let successCount = 0;
+    if (toCreate.length > 0) {
+      try {
+        const result = await prisma.user.createMany({
+          data: toCreate,
+          skipDuplicates: true,
         });
-        successCount++;
-      } catch (err: any) {
-        errors.push(`Baris ${i + 2}: Gagal memproses data (${err.message})`);
+        successCount = result.count;
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        return NextResponse.json(
+          { message: `Gagal batch insert: ${message}` },
+          { status: 500 }
+        );
       }
     }
 
-    return NextResponse.json({ 
-      message: `Berhasil mengimpor ${successCount} user. ${errors.length > 0 ? `(${errors.length} gagal)` : ''}`,
-      errors: errors.length > 0 ? errors : undefined
+    return NextResponse.json({
+      message: `Berhasil mengimpor ${successCount} user. ${errors.length > 0 ? `(${errors.length} gagal)` : ""}`,
+      errors: errors.length > 0 ? errors : undefined,
     });
-  } catch (error: any) {
-    console.error('Import error:', error);
-    return NextResponse.json({ message: 'Gagal memproses file Excel.' }, { status: 500 });
+  } catch (error: unknown) {
+    console.error("Import error:", error);
+    return NextResponse.json({ message: "Gagal memproses file Excel." }, { status: 500 });
   }
 }
