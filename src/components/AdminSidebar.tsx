@@ -32,11 +32,13 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import BookRoundedIcon from '@mui/icons-material/BookRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 
 const DRAWER_WIDTH = 280;
 
 const menuItems = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: <DashboardRoundedIcon /> },
+  { label: 'Pendaftaran', href: '/admin/pendaftaran', icon: <HowToRegRoundedIcon /> },
   {
     label: 'Kelola User',
     icon: <PeopleRoundedIcon />,

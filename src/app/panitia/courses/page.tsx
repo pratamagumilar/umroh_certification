@@ -46,7 +46,7 @@ export default function PanitiaCoursesPage() {
       const res = await fetch('/api/panitia/courses');
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Gagal memuat course.');
-      setCourses(data);
+      setCourses(Array.isArray(data) ? data : data.data || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Gagal memuat course.');
     } finally {

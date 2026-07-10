@@ -71,7 +71,7 @@ export default function AdminCoursesPage() {
       const res = await fetch('/api/admin/courses');
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Gagal memuat course.');
-      setCourses(data);
+      setCourses(Array.isArray(data) ? data : data.data || []);
     } catch (err: any) {
       toast.error(err.message || 'Gagal memuat course.');
     } finally {

@@ -80,19 +80,15 @@ export default function TakeExamPage({ params }: { params: Promise<{ id: string 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft !== null, submitting]);
 
-  // Auto submit when time is up
-  useEffect(() => {
-    if (timeLeft === 0 && !submitting) {
-      handleSubmit();
-    }
-  }, [timeLeft, submitting]);
-
   const handleAnswerChange = (questionId: string, value: string) => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: value
     }));
   };
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- data fetching on mount
+  const submitRef = React.useRef<() => void>(() => {});
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();

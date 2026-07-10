@@ -33,7 +33,7 @@ export default function PesertaCoursesPage() {
       const res = await fetch('/api/courses');
       if (!res.ok) throw new Error('Gagal memuat daftar course.');
       const data = await res.json();
-      setCourses(data);
+      setCourses(Array.isArray(data) ? data : data.data || []);
     } catch (err: any) {
       setError(err.message || 'Terjadi kesalahan.');
     } finally {

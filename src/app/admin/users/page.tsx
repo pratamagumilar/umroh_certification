@@ -82,7 +82,8 @@ function AdminUsersContent() {
       const url = roleParam ? `/api/admin/users?role=${roleParam}` : '/api/admin/users';
       const res = await fetch(url);
       const data = await res.json();
-      setUsers(data);
+      // API now returns { data, pagination } format
+      setUsers(Array.isArray(data) ? data : data.data || []);
     } catch {
       setError('Gagal memuat data user.');
     } finally {

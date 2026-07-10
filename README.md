@@ -1,170 +1,162 @@
 # Portal Sertifikasi Umroh - Dokumentasi Proyek
 
-Dokumen ini berisi informasi mengenai teknologi yang digunakan (*Tech Stack*), arsitektur role/hak akses, serta daftar fitur yang akan dibangun secara bertahap. Panduan ini berguna sebagai pengingat (*roadmap*) pengembangan proyek.
+Dokumen ini merangkum baseline produk, arsitektur role, status MVP yang sudah dikerjakan, dan arah MVP berikutnya. README ini berfungsi sebagai peta ringkas, sedangkan rincian eksekusi tiap fase ada di dokumen per-MVP.
 
 ## 🛠 Tech Stack
 
-| Kategori | Teknologi |
-|---|---|
-| Framework | [Next.js](https://nextjs.org/) (App Router) |
-| Bahasa | [TypeScript](https://www.typescriptlang.org/) |
-| UI Components | [Material UI (MUI)](https://mui.com/) |
-| Styling | [Tailwind CSS](https://tailwindcss.com/) |
-| Database | SQLite (development) |
-| ORM | [Prisma](https://www.prisma.io/) |
-| Autentikasi | [NextAuth.js](https://next-auth.js.org/) — Credentials Provider |
-| Keamanan | `bcrypt` untuk hashing password |
+| Kategori      | Teknologi                                                       |
+| ------------- | --------------------------------------------------------------- |
+| Framework     | [Next.js](https://nextjs.org/) (App Router)                     |
+| Bahasa        | [TypeScript](https://www.typescriptlang.org/)                   |
+| UI Components | [Material UI (MUI)](https://mui.com/)                           |
+| Styling       | [Tailwind CSS](https://tailwindcss.com/)                        |
+| Database      | PostgreSQL (utama), SQLite legacy untuk development lama        |
+| ORM           | [Prisma](https://www.prisma.io/)                                |
+| Autentikasi   | [NextAuth.js](https://next-auth.js.org/) — Credentials Provider |
+| Keamanan      | `bcrypt` untuk hashing password                                 |
+| Storage File  | Local storage / server filesystem                               |
 
 ---
 
-## 👥 Arsitektur Role (3 POV)
+## 👥 Arsitektur Role (4 POV)
 
-Aplikasi ini memiliki **3 role** dengan hak akses yang berbeda. Setiap akun hanya memiliki **1 role**. Tidak ada registrasi mandiri — semua akun dibuatkan oleh **Admin**.
+Aplikasi saat ini memiliki **4 role** aktif dengan hak akses berbeda. Setiap akun hanya memiliki **1 role**.
 
-| Role | Deskripsi |
-|---|---|
-| **ADMIN** | Pengelola sistem. Membuat akun user, mengelola ujian & soal, bulk import Excel, monitoring hasil, menerbitkan sertifikat. |
-| **PENGAWAS** | Pengawas & penilai ujian. Mengawasi pelaksanaan ujian, menilai jawaban esai, melihat rekapitulasi. |
-| **PESERTA** | Jamaah calon tersertifikasi. Mengerjakan ujian, melihat hasil, download sertifikat. |
+| Role         | Deskripsi                                                                                                                |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| **ADMIN**    | Pengelola sistem. Mengelola user, ujian, bank soal, hasil, sertifikat, course, dan approval operasional.                 |
+| **PANITIA**  | Operator pembelajaran dan operasional lapangan. Mengelola course, materi, enrollment, dan workflow pelaksanaan tertentu. |
+| **PENGAWAS** | Pengawas & penilai. Mengawasi ujian, menilai jawaban esai, dan memonitor tugas materi.                                   |
+| **PESERTA**  | Pengguna utama sistem. Mengikuti course, mengerjakan ujian, melihat hasil, dan mengakses sertifikat.                     |
 
-### Struktur Halaman per Role
+### Struktur Halaman Utama per Role
 
 ```
-/login                    → Semua role (masuk ke dashboard masing-masing)
+/login                         → Semua role
 
-/admin/dashboard          → Dashboard Admin
-/admin/users              → Kelola User (Peserta & Pengawas)
-/admin/exams              → Kelola Ujian
-/admin/exams/[id]/questions → Kelola Soal per Ujian
-/admin/results            → Monitoring Hasil Ujian
-/admin/certificates       → Kelola Sertifikat
+/admin/dashboard               → Dashboard Admin
+/admin/users                   → Kelola User
+/admin/exams                   → Kelola Ujian
+/admin/question-banks          → Kelola Bank Soal
+/admin/results                 → Monitoring Hasil
+/admin/certificates            → Kelola Sertifikat
+/admin/courses                 → Kelola Course
+/admin/assignments             → Kelola Master Tugas
 
-/pengawas/dashboard       → Dashboard Pengawas
-/pengawas/exams           → Daftar Ujian yang Diawasi
-/pengawas/grading         → Penilaian Jawaban Esai
-/pengawas/results         → Rekapitulasi Hasil
+/panitia/dashboard             → Dashboard Panitia
+/panitia/courses               → Operasional Course
+/panitia/materials             → Master Materi
 
-/dashboard                → Dashboard Peserta
-/profile                  → Profil & Upload Foto (opsional)
-/exams                    → Daftar Ujian Tersedia
-/exams/[id]               → Halaman Mengerjakan Ujian
-/results                  → Hasil Ujian
-/certificates             → Download Sertifikat
+/pengawas/dashboard            → Dashboard Pengawas
+/pengawas/exams                → Pengawasan Ujian
+/pengawas/grading              → Grading Ujian Esai
+/pengawas/material-grading     → Grading Tugas Materi
+
+/dashboard                     → Dashboard Peserta
+/profile                       → Profil Peserta
+/courses                       → Daftar Course Peserta
+/exams                         → Daftar Ujian
 ```
 
 ---
 
-## 🎯 Roadmap Fitur
+## 🎯 Status MVP
 
-Pengembangan dilakukan bertahap per POV. Prioritas: **Admin → Peserta → Pengawas**.
+## MVP 1 — Core Certification Platform ✅
 
-### MVP 2: Learning Course
+Fokus MVP 1 adalah fondasi sistem sertifikasi dan ujian.
 
-Rencana MVP 2 dipisahkan ke dokumen khusus agar bisa dipakai sebagai checklist implementasi:
+Sudah tercakup:
 
-- [docs/MVP2_LEARNING_COURSE_PLAN.md](docs/MVP2_LEARNING_COURSE_PLAN.md)
+- autentikasi, session, middleware role-based, dan redirect dashboard;
+- dashboard dasar untuk admin, pengawas, dan peserta;
+- kelola user oleh admin, termasuk bulk import user;
+- kelola bank soal dan pemetaan soal ke ujian;
+- kelola ujian, monitoring hasil, dan status kelulusan;
+- pelaksanaan ujian peserta dengan attendance dan timer;
+- grading esai oleh pengawas;
+- generate dan distribusi sertifikat.
 
-Fokus MVP 2 adalah modul pembelajaran hybrid: `Course -> Materi PDF -> Tugas Esai -> Penilaian -> Progress -> Moderasi Nilai`.
+## MVP 2 — Learning Course ✅
 
----
+Fokus MVP 2 adalah modul pembelajaran hybrid di atas mesin ujian yang sudah ada.
 
-### 🔴 FASE 1: Admin (Prioritas Utama)
+Sudah tercakup:
 
-#### 1.1 Autentikasi & Routing
-- [x] Halaman Login (shared untuk semua role)
-- [x] Session & JWT via NextAuth
-- [x] Middleware proteksi route berdasarkan role
-- [x] Auto-redirect setelah login ke dashboard sesuai role
+- role `PANITIA`;
+- course dan enrollment peserta;
+- master materi reusable;
+- mapping materi ke course;
+- progress pembelajaran peserta;
+- tugas esai per sesi;
+- grading tugas materi oleh pengawas;
+- grade adjustment oleh admin;
+- mapping course ke ujian existing.
 
-#### 1.2 Admin Dashboard
-- [x] Halaman overview: jumlah peserta, pengawas, ujian aktif, statistik kelulusan
+Dokumen acuan:
 
-#### 1.3 Kelola User (Peserta & Pengawas)
-- [x] Tabel daftar semua user (dengan filter role)
-- [x] Form tambah user baru (nama, email, password, role)
-- [x] Edit & hapus user
-- [x] **Bulk import user dari file Excel (.xlsx)**
+- [docs/MVP/MVP2_LEARNING_COURSE_PLAN.md](docs/MVP/MVP2_LEARNING_COURSE_PLAN.md)
 
-#### Fase 1.7: Refactoring Master Soal (Bank Soal) 🟢 SELESAI
-- [x] Schema: Pisahkan `Question` dari `Exam`, buat tabel `QuestionBank` & mapping `ExamQuestion`.
-- [x] API: Buat CRUD `/api/admin/question-banks` dan pindahkan API kelola soal ke bank.
-- [x] API: Mapping `ExamQuestion` saat assign soal ke ujian.
-- [x] UI: Menu "Bank Soal" di sidebar admin.
-- [x] UI: Halaman kelola Bank Soal (List, Create, Update, Delete).
-- [x] UI: Detail Bank Soal (Kelola Daftar Soal, Import Excel).
-- [x] UI: Refactor halaman Detail Ujian agar langsung memilih Bank Soal (semua soal otomatis masuk ke ujian).
-- [x] Aturan Kelola Ujian: Soal yang sudah dipilih dari Bank Soal tidak bisa dihapus manual per soal dari detail ujian.
+## MVP 3 — Enhancement & Optimization ✅ Sebagian Besar Selesai
 
-#### 1.4 Kelola Ujian
-- [x] Tabel daftar ujian
-- [x] Form buat ujian baru (judul, deskripsi, waktu mulai, durasi)
-- [x] Edit & hapus ujian
-- [x] Toggle aktif/nonaktif ujian (`isActive`)
+Fokus MVP 3 adalah UX, analytics, operational refinement, dan fitur lanjutan pasca MVP 2.
 
-#### 1.5 Kelola Soal (per Ujian)
-- [x] Tabel daftar soal dalam satu ujian
-- [x] Form tambah soal Pilihan Ganda (teks soal, opsi A/B/C/D, kunci jawaban)
-- [x] Form tambah soal Esai (teks soal)
-- [x] Edit & hapus soal
-- [x] **Bulk import soal dari file Excel (.xlsx)**
+Sudah tercakup:
 
-#### 1.6 Monitoring Hasil
-- [x] Tabel rekapitulasi hasil ujian semua peserta
-- [x] Detail jawaban per peserta
-- [x] Update status kelulusan (`LULUS` / `TIDAK_LULUS`)
+- revamp UI/UX lintas role;
+- dashboard analytics utama;
+- penguatan fitur tugas mandiri;
+- optimasi teknis query dan refactor komponen besar;
+- otomatisasi sertifikat dan template dinamis;
+- live exam monitoring, reset sesi, dan penambahan waktu.
 
-#### 1.7 Kelola Sertifikat
-- [x] Generate PDF sertifikat untuk peserta yang lulus
-- [x] Daftar sertifikat yang sudah diterbitkan
+Masih tercatat sebagai backlog pada plan MVP 3:
 
----
+- deadline tugas;
+- komentar/diskusi materi;
+- notifikasi in-app dan email.
 
-### 🟡 FASE 2: Peserta (Setelah Admin Selesai) 🟢 SELESAI
+Dokumen acuan:
 
-#### 2.1 Dashboard Peserta
-- [x] Overview: ujian mendatang, status hasil, sertifikat tersedia
+- [docs/MVP/MVP3_ENHANCEMENT_PLAN.md](docs/MVP/MVP3_ENHANCEMENT_PLAN.md)
 
-#### 2.2 Profil
-- [x] Upload foto profil (opsional)
-- [x] Edit nama / info dasar
+## MVP 4 — Registration, Kartu Peserta, dan Absensi QR 🔄 Planned
 
-#### 2.3 Pelaksanaan Ujian
-- [x] Daftar ujian yang tersedia/aktif
-- [x] Absensi kehadiran sebelum mulai ujian
-- [x] Antarmuka mengerjakan soal (PG + Esai) dengan timer countdown
-- [x] Submit jawaban
+Fokus MVP 4 adalah memperluas lifecycle peserta dari pendaftaran sampai absensi lapangan.
 
-#### 2.4 Hasil & Sertifikat
-- [x] Lihat skor dan status kelulusan
-- [x] Download sertifikat (jika lulus)
+Target utama:
+
+- registrasi mandiri peserta;
+- akun baru tetap menunggu approval admin;
+- kartu peserta dengan QR dan kode peserta khusus;
+- absensi oleh panitia melalui scan QR atau input kode manual.
+
+Dokumen acuan:
+
+- [docs/MVP/MVP4_REGISTRATION_CARD_ATTENDANCE_PLAN.md](docs/MVP/MVP4_REGISTRATION_CARD_ATTENDANCE_PLAN.md)
 
 ---
 
-### 🟢 FASE 3: Pengawas (Setelah Peserta Selesai)
+## 📌 Catatan Produk Saat Ini
 
-#### 3.1 Dashboard Pengawas
-- [x] Overview: ujian yang perlu diawasi, esai yang perlu dinilai
-
-#### 3.2 Pengawasan Ujian
-- [x] Monitoring kehadiran peserta secara real-time
-- [x] Lihat daftar peserta per ujian
-
-#### 3.3 Penilaian Esai
-- [x] Daftar jawaban esai yang belum dinilai
-- [x] Form penilaian (beri skor per jawaban esai)
-
-#### 3.4 Rekapitulasi
-- [x] Lihat hasil ujian peserta yang diawasi
+- Saat ini login masih berbasis akun yang aktif di sistem.
+- Pembuatan user publik belum menjadi flow aktif production dan direncanakan di MVP 4.
+- **1 akun = 1 role** tetap menjadi aturan dasar.
+- Bulk import Excel tersedia untuk user dan soal ujian.
+- Bank soal menjadi sumber utama soal ujian.
+- Sertifikat dan file pendukung memakai storage lokal/server filesystem sesuai environment.
 
 ---
 
-## 📝 Catatan Penting
+## 📚 Dokumen Penting
 
-- **Tidak ada registrasi publik.** Semua akun (Peserta, Pengawas) dibuatkan oleh Admin.
-- **1 akun = 1 role.** Tidak ada multi-role per akun.
-- **Bulk import Excel** tersedia untuk data user dan soal ujian.
-- **Kelola Ujian memakai Bank Soal sebagai sumber soal.** Setelah soal dari Bank Soal masuk ke ujian, admin tidak bisa menghapus soal satu per satu dari detail ujian.
-- **MVP 2 Learning Course** sudah direncanakan di `docs/MVP2_LEARNING_COURSE_PLAN.md`.
+- [docs/MVP/MVP2_LEARNING_COURSE_PLAN.md](docs/MVP/MVP2_LEARNING_COURSE_PLAN.md)
+- [docs/MVP/MVP3_ENHANCEMENT_PLAN.md](docs/MVP/MVP3_ENHANCEMENT_PLAN.md)
+- [docs/MVP/MVP4_REGISTRATION_CARD_ATTENDANCE_PLAN.md](docs/MVP/MVP4_REGISTRATION_CARD_ATTENDANCE_PLAN.md)
+- [docs/TESTING_NOTES.md](docs/TESTING_NOTES.md)
+- [docs/PERFORMANCE_REVIEW.md](docs/PERFORMANCE_REVIEW.md)
+- [docs/LOCAL_TO_AAPANEL_FILE_STORAGE_PLAN.md](docs/LOCAL_TO_AAPANEL_FILE_STORAGE_PLAN.md)
 
 ---
-*Terakhir diupdate: 3 Juli 2026*
+
+_Terakhir diupdate: 9 Juli 2026_

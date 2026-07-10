@@ -22,6 +22,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import ClassRoundedIcon from '@mui/icons-material/ClassRounded';
 import BookRoundedIcon from '@mui/icons-material/BookRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+import QrCodeScannerRoundedIcon from '@mui/icons-material/QrCodeScannerRounded';
 
 const DRAWER_WIDTH = 280;
 
@@ -29,6 +30,7 @@ const menuItems = [
   { label: 'Dashboard', href: '/panitia/dashboard', icon: <DashboardRoundedIcon /> },
   { label: 'Course & Materi', href: '/panitia/courses', icon: <ClassRoundedIcon /> },
   { label: 'Master Materi', href: '/panitia/materials', icon: <BookRoundedIcon /> },
+  { label: 'Absensi', href: '/panitia/absensi', icon: <QrCodeScannerRoundedIcon /> },
 ];
 
 export default function PanitiaSidebar() {

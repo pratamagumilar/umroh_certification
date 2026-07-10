@@ -63,7 +63,7 @@ function AdminResultsContent() {
     try {
       const res = await fetch('/api/admin/results');
       const data = await res.json();
-      setResults(data);
+      setResults(Array.isArray(data) ? data : data.data || []);
     } catch {
       setError('Gagal memuat data hasil ujian.');
     } finally {

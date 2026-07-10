@@ -29,11 +29,29 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error('Email atau password salah.');
+          // Check if there's a pending/rejected registration
+          const pendaftaran = await prisma.pendaftaran.findUnique({
+            where: { email: credentials.email },
+            select: { status: true },
+          });
+
+          if (pendaftaran?.status === "PENDING") {
+            throw new Error(
+              "Akun Anda masih menunggu persetujuan admin. Silakan coba lagi nanti."
+            );
+          }
+
+          if (pendaftaran?.status === "REJECTED") {
+            throw new Error(
+              "Pendaftaran Anda ditolak. Silakan hubungi admin untuk informasi lebih lanjut."
+            );
+          }
+
+          throw new Error("Email atau password salah.");
         }
 
         if (!user.isActive) {
-          throw new Error('Akun Anda telah dinonaktifkan. Silakan hubungi admin.');
+          throw new Error("Akun Anda telah dinonaktifkan. Silakan hubungi admin.");
         }
 
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);

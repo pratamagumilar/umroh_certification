@@ -28,7 +28,7 @@ if (STORAGE_PROVIDER === 'supabase') {
  */
 export async function uploadFile(
   buffer: Buffer,
-  folder: 'materials' | 'certificates',
+  folder: 'materials' | 'certificates' | 'registrations',
   fileName: string,
   mimeType: string = 'application/pdf'
 ): Promise<string> {

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Box, Card, CardContent, Typography, TextField, Button, Alert, CircularProgress, Avatar } from '@mui/material';
@@ -117,6 +118,15 @@ export default function LoginPage() {
               {loading ? 'Memproses...' : 'Masuk'}
             </Button>
           </form>
+
+          <Box sx={{ textAlign: 'center', mt: 1 }}>
+            <Typography variant="body2" color="text.secondary">
+              Belum punya akun?{' '}
+              <Link href="/register" style={{ color: '#1976d2', fontWeight: 600, textDecoration: 'none' }}>
+                Daftar di sini
+              </Link>
+            </Typography>
+          </Box>
 
         </CardContent>
       </Card>

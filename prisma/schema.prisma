@@ -15,8 +15,9 @@ model User {
   name      String
   role      String   @default("PESERTA") // ADMIN, PENGAWAS, PANITIA, PESERTA
   phone     String?
-  photoUrl  String?
-  isActive  Boolean  @default(true)
+  photoUrl    String?
+  kodePeserta String?   @unique
+  isActive    Boolean   @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -37,9 +38,18 @@ model User {
   createdCourses        Course[]          @relation("CourseCreator")
   gradeAdjustmentsMade  GradeAdjustment[] @relation("GradeAdmin")
 
+  // MVP 4 Registration
+  pendaftaran           Pendaftaran?  @relation("PendaftaranUser")
+  approvedRegistrations Pendaftaran[] @relation("PendaftaranApprover")
+
+  // MVP 4 Absensi
+  createdAbsensiEvents AbsensiEvent[]
+  absensiRecords       AbsensiRecord[]
+
   @@index([role])
   @@index([isActive])
   @@index([role, isActive])
+  @@index([kodePeserta])
 }
 
 model Exam {
@@ -333,4 +343,118 @@ model GradeAdjustment {
 
   @@index([userId])
   @@index([courseId])
+}
+
+// ============================================
+// MVP 4: Registration Models
+// ============================================
+
+// ============================================
+// MVP 4: Absensi Models
+// ============================================
+
+model AbsensiEvent {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  kodeAbsen   String   @unique  // e.g. ABS-H1-001
+  createdById String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User              @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  attendances AbsensiRecord[]
+
+  @@index([kodeAbsen])
+  @@index([createdById])
+}
+
+model AbsensiRecord {
+  id       String   @id @default(uuid())
+  eventId  String
+  userId   String
+  method   String   @default("QR_SCAN") // QR_SCAN, MANUAL, ADMIN
+  scanTime DateTime @default(now())
+
+  event AbsensiEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([userId])
+  @@index([eventId])
+}
+
+enum TipeDokumen {
+  PHOTO_3X4
+  IJAZAH
+  KTP
+  KARTU_KELUARGA
+  PASPOR
+  VISA
+  SURAT_SEHAT
+  SURAT_PERNYATAAN
+  BUKTI_TRANSFER
+}
+
+model Pendaftaran {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String
+
+  // Step 2: Data Diri
+  namaGelar       String
+  namaTanpaGelar  String
+  tempatLahir     String
+  tanggalLahir    DateTime
+  nik             String
+  jenisKelamin    String
+  noHp            String
+  alamatTinggal   String
+  provinsi        String
+
+  // Step 3: Data Kerja
+  unitKerja       String
+  jabatan         String
+  alamatKantor    String
+
+  // Step 4: Pendidikan
+  pendidikanTerakhir String
+  namaUniversitas    String
+
+  // Step 5: Perlengkapan
+  ukuranBaju      String
+
+  // Status
+  status          String    @default("PENDING")
+  alasanReject    String?
+  approvedById    String?
+  approvedAt      DateTime?
+
+  userId          String?   @unique
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  approvedBy      User?              @relation("PendaftaranApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  user            User?              @relation("PendaftaranUser", fields: [userId], references: [id], onDelete: SetNull)
+  dokumen         DokumenPendaftaran[]
+
+  @@index([status])
+  @@index([email])
+}
+
+model DokumenPendaftaran {
+  id             String       @id @default(uuid())
+  pendaftaranId  String
+  tipeDokumen    TipeDokumen
+  fileUrl        String
+  namaAsli       String
+  mimeType       String
+  createdAt      DateTime     @default(now())
+
+  pendaftaran    Pendaftaran  @relation(fields: [pendaftaranId], references: [id], onDelete: Cascade)
+
+  @@unique([pendaftaranId, tipeDokumen])
+  @@index([pendaftaranId])
 }

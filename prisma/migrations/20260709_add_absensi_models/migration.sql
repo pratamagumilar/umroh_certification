@@ -1,0 +1,37 @@
+-- CreateTable
+CREATE TABLE IF NOT EXISTS "AbsensiEvent" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "kodeAbsen" TEXT NOT NULL,
+    "createdById" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "AbsensiEvent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE IF NOT EXISTS "AbsensiRecord" (
+    "id" TEXT NOT NULL,
+    "eventId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "method" TEXT NOT NULL DEFAULT 'QR_SCAN',
+    "scanTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "AbsensiRecord_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX IF NOT EXISTS "AbsensiEvent_kodeAbsen_key" ON "AbsensiEvent"("kodeAbsen");
+CREATE INDEX IF NOT EXISTS "AbsensiEvent_kodeAbsen_idx" ON "AbsensiEvent"("kodeAbsen");
+CREATE INDEX IF NOT EXISTS "AbsensiEvent_createdById_idx" ON "AbsensiEvent"("createdById");
+CREATE UNIQUE INDEX IF NOT EXISTS "AbsensiRecord_eventId_userId_key" ON "AbsensiRecord"("eventId", "userId");
+CREATE INDEX IF NOT EXISTS "AbsensiRecord_userId_idx" ON "AbsensiRecord"("userId");
+CREATE INDEX IF NOT EXISTS "AbsensiRecord_eventId_idx" ON "AbsensiRecord"("eventId");
+
+-- AddForeignKey
+ALTER TABLE "AbsensiEvent" ADD CONSTRAINT "AbsensiEvent_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AbsensiRecord" ADD CONSTRAINT "AbsensiRecord_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "AbsensiEvent"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AbsensiRecord" ADD CONSTRAINT "AbsensiRecord_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

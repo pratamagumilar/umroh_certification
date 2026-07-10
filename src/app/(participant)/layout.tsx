@@ -11,6 +11,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import QuizRoundedIcon from '@mui/icons-material/QuizRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import CardMembershipRoundedIcon from '@mui/icons-material/CardMembershipRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
@@ -44,6 +45,7 @@ export default function ParticipantLayout({ children }: { children: React.ReactN
     { text: 'Dashboard', icon: <DashboardRoundedIcon />, path: '/dashboard' },
     { text: 'Materi Kelas', icon: <SchoolRoundedIcon />, path: '/courses' },
     { text: 'Ujian Saya', icon: <QuizRoundedIcon />, path: '/exams' },
+    { text: 'Kartu Peserta', icon: <CardMembershipRoundedIcon />, path: '/kartu' },
     { text: 'Profil', icon: <PersonRoundedIcon />, path: '/profile' },
   ];
 
